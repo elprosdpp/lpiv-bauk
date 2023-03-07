@@ -1,6 +1,21 @@
 <script setup>
 import {Head} from "@inertiajs/vue3";
 import AdminLayout from "../Layouts/AdminLayout.vue";
+import {ref} from 'vue'
+import {
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    DialogDescription,
+} from '@headlessui/vue'
+
+const isOpen = ref(true)
+
+function setIsOpen(value) {
+    isOpen.value = value
+}
+
+
 </script>
 
 <template>
@@ -8,20 +23,30 @@ import AdminLayout from "../Layouts/AdminLayout.vue";
     <Head title="Posts"></Head>
 
     <AdminLayout>
-        <div class="grid grid-cols-3 gap-4 mb-4">
-            <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-                <p class="text-2xl text-gray-400 dark:text-gray-500">+</p>
-            </div>
-            <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-                <p class="text-2xl text-gray-400 dark:text-gray-500">+</p>
-            </div>
-            <div class="flex items-center justify-center h-24 rounded bg-gray-50 dark:bg-gray-800">
-                <p class="text-2xl text-gray-400 dark:text-gray-500">+</p>
-            </div>
-        </div>
-        <div class="flex items-center justify-center h-48 mb-4 rounded bg-gray-50 dark:bg-gray-800">
-            <p class="text-2xl text-gray-400 dark:text-gray-500">+</p>
-        </div>
+        <button
+            class="rounded-md bg-black  px-4 py-2 text-sm font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+            type="button">
+            Open dialog
+        </button>
+
+
+
+        <Dialog :open="isOpen" @close="setIsOpen">
+            <DialogPanel>
+                <DialogTitle>Deactivate account</DialogTitle>
+                <DialogDescription>
+                    This will permanently deactivate your account
+                </DialogDescription>
+
+                <p>
+                    Are you sure you want to deactivate your account? All of your data will be
+                    permanently removed. This action cannot be undone.
+                </p>
+
+                <button @click="setIsOpen(false)">Deactivate</button>
+                <button @click="setIsOpen(false)">Cancel</button>
+            </DialogPanel>
+        </Dialog>
     </AdminLayout>
 
 </template>
