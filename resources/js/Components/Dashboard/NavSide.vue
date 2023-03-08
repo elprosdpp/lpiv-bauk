@@ -2,6 +2,8 @@
 import {ref} from 'vue';
 import { useDark, useToggle } from '@vueuse/core';
 import {Head, Link, useForm, usePage, router} from '@inertiajs/vue3';
+import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+import ResponsiveSideLink from '@/Components/ResponsiveSideLink.vue';
 import {
     Disclosure,
     DisclosureButton,
@@ -184,9 +186,18 @@ function openModal() {
                                 </form>
                             </li>
                             <li>
-                                <Link
-                                    :href="route('dashboard')"
-                                    class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">
+<!--                                <Link-->
+<!--                                    :href="route('dashboard')" -->
+<!--                                    class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">-->
+<!--                                    <svg-->
+<!--                                        class="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"-->
+<!--                                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">-->
+<!--                                        <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>-->
+<!--                                        <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>-->
+<!--                                    </svg>-->
+<!--                                    <span class="ml-3" sidebar-toggle-item="">Dashboard</span>-->
+<!--                                </Link>-->
+                                <ResponsiveSideLink :active="route().current('dashboard')" :href="route('dashboard')">
                                     <svg
                                         class="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
                                         fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -194,7 +205,14 @@ function openModal() {
                                         <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                                     </svg>
                                     <span class="ml-3" sidebar-toggle-item="">Dashboard</span>
-                                </Link>
+                                </ResponsiveSideLink>
+
+                                <ResponsiveSideLink :active="route().current('post.index')" :href="route('post.index')">
+                                    <svg class="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                        <path clip-rule="evenodd" fill-rule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm2.25 8.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 3a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z"></path>
+                                    </svg>
+                                    <span class="ml-3" sidebar-toggle-item="">Permission</span>
+                                </ResponsiveSideLink>
                             </li>
                             <li>
                                 <Disclosure>
@@ -220,16 +238,19 @@ function openModal() {
                                     <DisclosurePanel class="space-y-2 py-2">
                                         <ul>
                                             <li>
-                                                <a class="text-base text-gray-900 rounded-lg flex items-center p-2 group hover:bg-gray-100 transition duration-75 pl-11 dark:text-gray-200 dark:hover:bg-gray-700 "
-                                                   href="https://flowbite-admin-dashboard.vercel.app/playground/stacked/">Role</a>
+                                                <ResponsiveNavLink :active="route().current('role.index')" :href="route('role.index')">
+                                                    Role
+                                                </ResponsiveNavLink>
                                             </li>
                                             <li>
-                                                <a class="text-base text-gray-900 rounded-lg flex items-center p-2 group hover:bg-gray-100 transition duration-75 pl-11 dark:text-gray-200 dark:hover:bg-gray-700 "
-                                                   href="https://flowbite-admin-dashboard.vercel.app/playground/sidebar/NavSide.vue">Permission</a>
+                                                <ResponsiveNavLink :active="route().current('permission.index')" :href="route('permission.index')">
+                                                    Permission
+                                                </ResponsiveNavLink>
                                             </li>
                                             <li>
-                                                <a class="text-base text-gray-900 rounded-lg flex items-center p-2 group hover:bg-gray-100 transition duration-75 pl-11 dark:text-gray-200 dark:hover:bg-gray-700 "
-                                                   href="https://flowbite-admin-dashboard.vercel.app/playground/sidebar/NavSide.vue">User</a>
+                                                <ResponsiveNavLink :active="route().current('user.index')" :href="route('user.index')">
+                                                    User
+                                                </ResponsiveNavLink>
                                             </li>
                                         </ul>
                                     </DisclosurePanel>
