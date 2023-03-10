@@ -1,6 +1,6 @@
 <script setup>
 import {ref} from 'vue';
-import { useDark, useToggle } from '@vueuse/core';
+import {useDark, useToggle} from '@vueuse/core';
 import {Head, Link, useForm, usePage, router} from '@inertiajs/vue3';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
 import ResponsiveSideLink from '@/Components/ResponsiveSideLink.vue';
@@ -21,6 +21,8 @@ const isProfile = ref(false);
 const sidebar = ref(false);
 
 const user = usePage().props.auth.user;
+const role = usePage().props.user.roles[0];
+
 const isDark = useDark();
 const toggleDark = useToggle(isDark);
 
@@ -39,9 +41,11 @@ function openModal() {
         <div class="px-3 py-3 lg:px-5 lg:pl-3">
             <div class="flex items-center justify-between">
                 <div class="flex items-center justify-start">
-                    <button @click="sidebar = !sidebar" id="toggleSidebarMobile" aria-controls="sidebar" aria-expanded="true"
-                            class="p-2 text-gray-600 rounded cursor-pointer lg:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                        <svg v-if="!sidebar" id="toggleSidebarMobileHamburger" class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"
+                    <button id="toggleSidebarMobile" aria-controls="sidebar" aria-expanded="true"
+                            class="p-2 text-gray-600 rounded cursor-pointer lg:hidden hover:text-gray-900 hover:bg-gray-100 focus:bg-gray-100 dark:focus:bg-gray-700 focus:ring-2 focus:ring-gray-100 dark:focus:ring-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
+                            @click="sidebar = !sidebar">
+                        <svg v-if="!sidebar" id="toggleSidebarMobileHamburger" class="w-6 h-6" fill="currentColor"
+                             viewBox="0 0 20 20"
                              xmlns="http://www.w3.org/2000/svg">
                             <path clip-rule="evenodd"
                                   d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h6a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z"
@@ -80,10 +84,10 @@ function openModal() {
                 </div>
                 <div class="flex items-center">
                     <button id="theme-toggle"
-                            @click="toggleDark()"
                             class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
                             data-tooltip-target="tooltip-toggle"
-                            type="button">
+                            type="button"
+                            @click="toggleDark()">
                         <svg
                             v-if="!isDark"
                             class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"
@@ -128,7 +132,7 @@ function openModal() {
                                     {{ user.email }}
                                 </p>
                             </div>
-                            <ul class="py-1" role="none" >
+                            <ul class="py-1" role="none">
                                 <li @click="isProfile = !isProfile">
                                     <a class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                                        href="#"
@@ -152,12 +156,13 @@ function openModal() {
         </div>
     </nav>
 
-    <div id="sidebarBackdrop" :class="sidebar ? 'fixed inset-0 z-10 bg-gray-500/50 dark:bg-gray-900/50' : 'fixed hidden inset-0 z-10 bg-gray-500/50 dark:bg-gray-900/50'"></div>
+    <div id="sidebarBackdrop"
+         :class="sidebar ? 'fixed inset-0 z-10 bg-gray-500/50 dark:bg-gray-900/50' : 'fixed hidden inset-0 z-10 bg-gray-500/50 dark:bg-gray-900/50'"></div>
 
     <div class="flex pt-16 overflow-hidden bg-gray-50 dark:bg-gray-900">
         <aside id="sidebar"
-               aria-label="Sidebar"
-               :class="sidebar ? 'fixed top-0 left-0 z-20 flex flex-col flex-shrink-0 w-64 h-full pt-16 font-normal duration-75 lg:flex transition-width' : 'fixed top-0 left-0 z-20 flex flex-col hidden flex-shrink-0 w-64 h-full pt-16 font-normal duration-75 lg:flex transition-width'">
+               :class="sidebar ? 'fixed top-0 left-0 z-20 flex flex-col flex-shrink-0 w-64 h-full pt-16 font-normal duration-75 lg:flex transition-width' : 'fixed top-0 left-0 z-20 flex flex-col hidden flex-shrink-0 w-64 h-full pt-16 font-normal duration-75 lg:flex transition-width'"
+               aria-label="Sidebar">
             <div
                 class="relative flex flex-col flex-1 min-h-0 pt-0 bg-white border-r border-gray-200 dark:bg-gray-800 dark:border-gray-700">
                 <div class="flex flex-col flex-1 pt-5 pb-4 overflow-y-auto">
@@ -186,35 +191,26 @@ function openModal() {
                                 </form>
                             </li>
                             <li>
-<!--                                <Link-->
-<!--                                    :href="route('dashboard')" -->
-<!--                                    class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">-->
-<!--                                    <svg-->
-<!--                                        class="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"-->
-<!--                                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">-->
-<!--                                        <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>-->
-<!--                                        <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>-->
-<!--                                    </svg>-->
-<!--                                    <span class="ml-3" sidebar-toggle-item="">Dashboard</span>-->
-<!--                                </Link>-->
+                                <!--                                <Link-->
+                                <!--                                    :href="route('dashboard')" -->
+                                <!--                                    class="flex items-center p-2 text-base text-gray-900 rounded-lg hover:bg-gray-100 group dark:text-gray-200 dark:hover:bg-gray-700">-->
+                                <!--                                    <svg-->
+                                <!--                                        class="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"-->
+                                <!--                                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">-->
+                                <!--                                        <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>-->
+                                <!--                                        <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>-->
+                                <!--                                    </svg>-->
+                                <!--                                    <span class="ml-3" sidebar-toggle-item="">Dashboard</span>-->
+                                <!--                                </Link>-->
                                 <ResponsiveSideLink :active="route().current('dashboard')" :href="route('dashboard')">
-                                    <svg
-                                        class="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white"
-                                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <svg :class="route().current('dashboard') ? 'w-6 h-6 text-gray-900 transition duration-75 group-hover:text-gray-900 dark:text-gray-100 dark:group-hover:text-white' : 'w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white'" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
                                         <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                                     </svg>
                                     <span class="ml-3" sidebar-toggle-item="">Dashboard</span>
                                 </ResponsiveSideLink>
-
-                                <ResponsiveSideLink :active="route().current('post.index')" :href="route('post.index')">
-                                    <svg class="w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                                        <path clip-rule="evenodd" fill-rule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm2.25 8.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 3a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z"></path>
-                                    </svg>
-                                    <span class="ml-3" sidebar-toggle-item="">Permission</span>
-                                </ResponsiveSideLink>
                             </li>
-                            <li>
+                            <li v-if="role === 'super-admin'">
                                 <Disclosure>
                                     <DisclosureButton
                                         class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
@@ -238,23 +234,38 @@ function openModal() {
                                     <DisclosurePanel class="space-y-2 py-2">
                                         <ul>
                                             <li>
-                                                <ResponsiveNavLink :active="route().current('role.index')" :href="route('role.index')">
+                                                <ResponsiveNavLink :active="route().current('role.index')"
+                                                                   :href="route('role.index')">
                                                     Role
                                                 </ResponsiveNavLink>
                                             </li>
                                             <li>
-                                                <ResponsiveNavLink :active="route().current('permission.index')" :href="route('permission.index')">
+                                                <ResponsiveNavLink :active="route().current('permission.index')"
+                                                                   :href="route('permission.index')">
                                                     Permission
                                                 </ResponsiveNavLink>
                                             </li>
                                             <li>
-                                                <ResponsiveNavLink :active="route().current('user.index')" :href="route('user.index')">
+                                                <ResponsiveNavLink :active="route().current('user.index')"
+                                                                   :href="route('user.index')">
                                                     User
                                                 </ResponsiveNavLink>
                                             </li>
                                         </ul>
                                     </DisclosurePanel>
                                 </Disclosure>
+                            </li>
+                            <li>
+                                <ResponsiveSideLink :active="route().current('post.index')" :href="route('post.index')">
+                                    <svg
+                                        :class="route().current('post.index') ? 'w-6 h-6 text-gray-900 transition duration-75 group-hover:text-gray-900 dark:text-gray-100 dark:group-hover:text-white' : 'w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white'"
+                                        aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path clip-rule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm2.25 8.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 3a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z"
+                                              fill-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="ml-3" sidebar-toggle-item="">Post</span>
+                                </ResponsiveSideLink>
                             </li>
                         </ul>
 
@@ -327,7 +338,8 @@ function openModal() {
                                                 </div>
 
                                                 <div class="mt-4">
-                                                    <Link :href="route('logout')" as="button" class="inline-flex mr-2 justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                                    <Link :href="route('logout')" as="button"
+                                                          class="inline-flex mr-2 justify-center rounded-md border border-transparent bg-blue-500 px-4 py-2 text-sm font-medium text-white hover:bg-blue-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                                           method="post"
                                                     >
                                                         Logout

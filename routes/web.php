@@ -50,10 +50,12 @@ Route::group(['prefix' => '/admin', 'middleware' => 'auth'], function () {
 Route::group([
     'namespace' => 'App\Http\Controllers\Admin',
     'prefix' => 'admin',
-    'middleware' => ['auth'],
+    'middleware' => ['auth', 'role:super-admin'],
 ], function () {
     Route::resource('user', 'UserController');
     Route::resource('role', 'RoleController');
+    Route::post('/role/{role}/permissions', [\App\Http\Controllers\Admin\RoleController::class, 'givePermission'])->name('role.permissions');
+    Route::delete('/role/{role}/permissions/{permission}', [\App\Http\Controllers\Admin\RoleController::class, 'revokePermission'])->name('roles.permissions.revoke');
     Route::resource('permission', 'PermissionController');
     Route::resource('post', 'PostController');
 });

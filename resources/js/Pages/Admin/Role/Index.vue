@@ -1,7 +1,21 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import {Head} from '@inertiajs/vue3';
+import {Head, Link} from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import {
+    Disclosure,
+    DisclosureButton,
+    DisclosurePanel,
+    TransitionRoot,
+    TransitionChild,
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+} from '@headlessui/vue';
+import {ref} from "vue";
+
+const isOpen = ref(false);
+
 
 const props = defineProps({
     roles: {
@@ -13,6 +27,14 @@ const props = defineProps({
         default: () => ({}),
     },
 })
+
+function closeModal() {
+    isOpen.value = false;
+}
+
+function openModal() {
+    isOpen.value = true;
+}
 </script>
 
 <template>
@@ -26,8 +48,13 @@ const props = defineProps({
                         <div class="flex space-x-2 items-center text-white">
                             Role Settings Page! Here you can list, create, update or delete role!
                         </div>
-                        <div class="flex space-x-2 items-center" v-if="can.create">
-                            <a href="#" class="px-4 py-2 bg-green-500 uppercase text-white rounded focus:outline-none flex items-center"><span class="iconify mr-1" data-icon="gridicons:create" data-inline="false"></span> Create Role</a>
+                        <div v-if="can.create" class="flex space-x-2 items-center">
+                            <Link
+                                :href="route('role.create')"
+                                class="px-4 py-2 bg-green-500 uppercase text-white rounded focus:outline-none flex items-center"><span
+                                class="iconify mr-1" data-icon="gridicons:create" data-inline="false">
+                            </span> Create Role
+                            </Link>
                         </div>
                     </div>
                 </div>
@@ -37,26 +64,32 @@ const props = defineProps({
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th scope="col" class="py-3 px-6">Name</th>
-                            <th v-if="can.edit || can.delete" scope="col" class="py-3 px-6">Actions</th>
+                            <th class="py-3 px-6" scope="col">Name</th>
+                            <th v-if="can.edit || can.delete" class="py-3 px-6" scope="col">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="role in roles.data" :key="role.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                            <td data-label="Name" class="py-4 px-6">
+                        <tr v-for="role in roles.data" :key="role.id"
+                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <td class="py-4 px-6" data-label="Name">
                                 {{ role.name }}
                             </td>
                             <td
                                 v-if="can.edit || can.delete"
                                 class="py-4 px-6"
                             >
-                                <div type="justify-start lg:justify-end" no-wrap>
-                                    <PrimaryButton class="ml-4 bg-green-500 px-2 py-1 rounded text-white cursor-pointer" v-if="can.edit">
+                                <div no-wrap type="justify-start lg:justify-end">
+                                    <Link v-if="can.edit"
+                                          :href="route('role.edit', role.id)"
+                                          class="ml-4 bg-green-500 px-2 py-1 rounded text-white cursor-pointer">
                                         Edit
-                                    </PrimaryButton>
-                                    <PrimaryButton class="ml-4 bg-red-500 px-2 py-1 rounded text-white cursor-pointer" v-if="can.delete">
+                                    </Link>
+                                    <Link v-if="can.edit"
+                                          :href="route('role.destroy', role.id)"
+                                          method="DELETE" as="button"
+                                          class="ml-4 bg-red-500 px-2 py-1 rounded text-white cursor-pointer">
                                         Delete
-                                    </PrimaryButton>
+                                    </Link>
                                 </div>
                             </td>
                         </tr>

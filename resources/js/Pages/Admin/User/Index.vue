@@ -58,7 +58,7 @@ const props = defineProps({
                                 v-if="can.edit || can.delete"
                                 class="py-4 px-6"
                             >
-                                <div no-wrap type="justify-start lg:justify-end">
+                                <div type="justify-start lg:justify-end">
                                     <PrimaryButton v-if="can.edit"
                                                   class="ml-4 bg-green-500 px-2 py-1 rounded text-white cursor-pointer">
                                         Edit

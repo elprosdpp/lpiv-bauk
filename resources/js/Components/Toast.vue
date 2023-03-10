@@ -19,7 +19,7 @@ onMounted(() => {
     <Transition name="slide-fade">
         <div v-if="message && showNotification" class="max-w-2xl">
             <div id="toast-default"
-                 class="flex items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg border-b-2 border-indigo-400 shadow"
+                 class="flex items-center w-full max-w-xs p-4 text-gray-500 bg-white rounded-lg border-b-2 border-indigo-400 shadow dark:bg-blue-900"
                  role="alert">
                 <div
                     class="inline-flex items-center justify-center flex-shrink-0 w-8 h-8 text-blue-500 bg-blue-100 rounded-lg ">
@@ -30,7 +30,7 @@ onMounted(() => {
                         </path>
                     </svg>
                 </div>
-                <div class="ml-3 text-sm font-bold">{{ message }} !</div>
+                <div class="ml-3 text-sm font-bold dark:text-white">{{ message }} !</div>
             </div>
         </div>
     </Transition>
