@@ -35,11 +35,18 @@ class RoleController extends Controller
 //        $roles->latest();
 //        $roles = $roles->paginate(100)->onEachSide(2)->appends(request()->query());
         $permission = Permission::pluck('name');
-        $roles = DB::table('view_index_permission_role')->get()->all();
+
+        $roles = DB::table('view_index_permission_role')->when(Request::input('search'), function ($query, $search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        })->paginate(2)
+            ->withQueryString();
+
+//        dd($roles);
 
         return Inertia::render('Admin/Role/Index', [
             'roles' => $roles,
             'permission' => $permission,
+            'filters' => Request::only(['search']),
             'can' => [
                 'create' => Auth::user()->can('role create'),
                 'edit' => Auth::user()->can('role edit'),
