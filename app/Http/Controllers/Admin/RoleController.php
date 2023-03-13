@@ -54,20 +54,28 @@ class RoleController extends Controller
     public function store(RoleRequest $request): RedirectResponse
     {
         \Spatie\Permission\Models\Role::create($request->validated());
-        return to_route('role.index')->with("message", "Data Role Berhasil Ditambah");;
+        return to_route('role.index')->with("message", "Data Role Berhasil Ditambah");
+//        return back()->with('message', "Data Role Berhasil Ditambah");
     }
 
     public function edit($id): Response
     {
         $role = \Spatie\Permission\Models\Role::findById($id);
-        $permission = Permission::all();
-        $permissionId = DB::table('view_permission_role')->where('role_id', $id)->get();
+        $permission = Permission::pluck('name');
+        $permissionId = DB::table('view_permission_role')->where('role_id', $id)->get()->all();
+        $permissionJSON = DB::table('view_permission_role')->where('role_id', $id)->select('name')->get();
 
-//        dd($permissionId);
+//       $data = $getID->toJson();
+        $data = $permissionJSON->collect();
+        $plucked = $data->pluck('name')->all();
+
+//        dd($plucked);
+
         return Inertia::render('Admin/Role/Edit', [
             'role' => $role,
             'permission' => $permission,
-            'permissionId' => $permissionId
+            'permissionId' => $permissionId,
+            'permissionJSON' => $plucked
         ]);
     }
 
@@ -77,6 +85,7 @@ class RoleController extends Controller
         $role->update($request->validated());
 
         return to_route('role.index')->with("message", "Data Role Berhasil Diubah");
+//        return back()->with("message", "Data Role Berhasil Diubah");
     }
 
 
@@ -85,26 +94,34 @@ class RoleController extends Controller
         $role = \Spatie\Permission\Models\Role::findById($id);
         $role->delete();
 
-        return to_route('role.index')->with("message", "Data Profil Berhasil Dihapus");;
+        return to_route('role.index')->with("message", "Data Profil Berhasil Dihapus");
+//        return back()->with('message', "Data Profil Berhasil Dihapus");
     }
 
     public function givePermission(PermissionRequest $request, Role $role): RedirectResponse
     {
-        if ($role->hasPermissionTo($request->permission)) {
-            return back()->with('message', 'Permission exists.');
+//        if ($role->hasPermissionTo($request->permission)) {
+//            return back()->with('message', 'Permission Sudah Tersedia');
+//        }
+        $permissions = $request->validated();
+//
+        foreach ($permissions as $permission) {
+            $role->givePermissionTo($permission);
         }
-        $role->givePermissionTo($request->validated());
-//        return to_route('role.index')->with("message", "Permission added.");;
-        return back()->with('message', 'Permission added.');
+
+//        dd($permissions);
+//        $role->givePermissionTo($permissions);
+//        return to_route('role.index')->with("message", "Permission added.");
+        return back()->with('message', 'Permission ' . $role->name . ' Berhasil Ditambah');
     }
 
     public function revokePermission(Role $role, Permission $permission): RedirectResponse
     {
         if ($role->hasPermissionTo($permission)) {
             $role->revokePermissionTo($permission);
-            return back()->with('message', 'Permission revoked.');
+            return back()->with('message', 'Permission Berhasil Dihapus.');
         }
-        return back()->with('message', 'Permission not exists.');
+        return back()->with('message', 'Permission Tidak Ada');
     }
 
 

@@ -12,7 +12,6 @@ export default defineConfig({
         laravel({
             input: [
                 'resources/js/app.js',
-                // 'node_modules/flowbite/dist/flowbite.js',
             ],
             refresh: true,
         }),
