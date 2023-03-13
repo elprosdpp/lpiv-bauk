@@ -2,6 +2,8 @@
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import InputLabel from '@/Components/InputLabel.vue';
+import Multiselect from '@vueform/multiselect'
 import {
     TransitionRoot,
     TransitionChild,
@@ -17,6 +19,7 @@ const isOpen = ref(false);
 
 const form = useForm({
     name: '',
+    permission: []
 });
 
 const storeRole = () => {
@@ -38,7 +41,11 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
-})
+    permission: {
+        type: Object,
+        default: () => ({}),
+    }
+});
 
 function closeModal() {
     isOpen.value = false;
@@ -73,27 +80,36 @@ function openModal() {
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
                             <th class="py-3 px-6" scope="col">Name</th>
+                            <th class="py-3 px-6" scope="col">Permissions</th>
                             <th v-if="can.edit || can.delete" class="py-3 px-6" scope="col">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="role in roles.data" :key="role.id"
+                        <tr v-for="role in props.roles" :key="role.role_id"
                             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td class="py-4 px-6" data-label="Name">
                                 {{ role.name }}
                             </td>
+                            <td v-if="role.permission_name" class="flex flex-wrap py-4 px-6 max-w-2xl">
+                                <div v-for="(r, index) in role.permission_name.split(',')" :key="index"
+                                     class="flex flex-wrap">
+                                    <span
+                                        class="bg-blue-100 mb-2 text-blue-800 text-xs font-medium mr-1 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300 ">{{ r }}</span>
+                                </div>
+                            </td>
+                            <td v-else>No Permission</td>
                             <td
                                 v-if="can.edit || can.delete"
                                 class="py-4 px-6"
                             >
                                 <div no-wrap type="justify-start lg:justify-end">
                                     <Link v-if="can.edit"
-                                          :href="route('role.edit', role.id)"
+                                          :href="route('role.edit', role.role_id)"
                                           class="ml-4 bg-green-500 px-2 py-1 rounded text-white cursor-pointer">
                                         Edit
                                     </Link>
                                     <Link v-if="can.edit"
-                                          :href="route('role.destroy', role.id)"
+                                          :href="route('role.destroy', role.role_id)"
                                           as="button"
                                           class="ml-4 bg-red-500 px-2 py-1 rounded text-white cursor-pointer"
                                           method="DELETE"
@@ -139,12 +155,6 @@ function openModal() {
                                 <DialogPanel
                                     class="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all dark:bg-gray-700"
                                 >
-                                    <!--                                    <DialogTitle-->
-                                    <!--                                        as="h3"-->
-                                    <!--                                        class="text-lg font-medium leading-6 text-gray-900"-->
-                                    <!--                                    >-->
-                                    <!--                                        Payment successful-->
-                                    <!--                                    </DialogTitle>-->
                                     <div class="relative w-full h-full max-w-md md:h-auto">
                                         <!-- Modal content -->
                                         <div class="relative bg-white rounded-lg dark:bg-gray-700">
@@ -161,7 +171,7 @@ function openModal() {
                                                 </svg>
                                                 <span class="sr-only">Close modal</span>
                                             </button>
-                                            <div class="px-6 py-6 lg:px-8">
+                                            <div class="px-6 py-6 lg:px-10 lg:pb-20">
                                                 <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">
                                                     Create Role</h3>
                                                 <form class="space-y-6"
@@ -177,6 +187,21 @@ function openModal() {
                                                                placeholder="Admin | Writter | User"
                                                                required type="text">
                                                     </div>
+
+                                                    <InputLabel for="permission" value="Permission Add" class="-mb-6"/>
+                                                    <multiselect
+                                                        v-model="form.permission"
+                                                        :allow-absent="true"
+                                                        :close-on-select="false"
+                                                        :hideSelected="true"
+                                                        :options="props.permission"
+                                                        :searchable="true"
+                                                        class="mt-3"
+                                                        label="name"
+                                                        mode="tags"
+                                                        placeholder="Select Permission"
+                                                        track-by="name">
+                                                    </multiselect>
 
                                                     <button
                                                         class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
@@ -199,3 +224,5 @@ function openModal() {
     </AdminLayout>
 
 </template>
+
+<style src="@vueform/multiselect/themes/default.css"></style>

@@ -31,12 +31,15 @@ class RoleController extends Controller
      */
     public function index(): Response
     {
-        $roles = (new Role)->newQuery();
-        $roles->latest();
-        $roles = $roles->paginate(100)->onEachSide(2)->appends(request()->query());
+//        $roles = (new Role)->newQuery();
+//        $roles->latest();
+//        $roles = $roles->paginate(100)->onEachSide(2)->appends(request()->query());
+        $permission = Permission::pluck('name');
+        $roles = DB::table('view_index_permission_role')->get()->all();
 
         return Inertia::render('Admin/Role/Index', [
             'roles' => $roles,
+            'permission' => $permission,
             'can' => [
                 'create' => Auth::user()->can('role create'),
                 'edit' => Auth::user()->can('role edit'),
@@ -51,9 +54,16 @@ class RoleController extends Controller
         return Inertia::render('Admin/Role/Create');
     }
 
-    public function store(RoleRequest $request): RedirectResponse
+    public function store(RoleRequest $request, PermissionRequest $permissionRequest): RedirectResponse
     {
-        \Spatie\Permission\Models\Role::create($request->validated());
+//        \Spatie\Permission\Models\Role::create($request->validated());
+        $role1 = \Spatie\Permission\Models\Role::create($request->validated());
+        $permissions = $permissionRequest->validated();
+
+        foreach ($permissions as $permission) {
+            $role1->givePermissionTo($permission);
+        }
+
         return to_route('role.index')->with("message", "Data Role Berhasil Ditambah");
 //        return back()->with('message', "Data Role Berhasil Ditambah");
     }
@@ -94,7 +104,7 @@ class RoleController extends Controller
         $role = \Spatie\Permission\Models\Role::findById($id);
         $role->delete();
 
-        return to_route('role.index')->with("message", "Data Profil Berhasil Dihapus");
+        return to_route('role.index')->with("message", "Data Role Berhasil Dihapus");
 //        return back()->with('message', "Data Profil Berhasil Dihapus");
     }
 

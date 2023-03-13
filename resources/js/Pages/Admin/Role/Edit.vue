@@ -41,7 +41,16 @@ const form = useForm({
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-2">
 
                 <!--Form Role Edit-->
-                <form class="flex flex-col" @submit.prevent="$event=>form.put(route('role.update', role.id))">
+                <Link :href="route('role.index')"
+                      class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                      >
+                    <svg class="w-4 h-4 inline-flex" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"></path>
+                    </svg>
+                    Back
+                </Link>
+
+                <form class="flex flex-col mt-10" @submit.prevent="$event=>form.put(route('role.update', role.id))">
                     <div>
                         <InputLabel for="name" value="Name"/>
                         <TextInput
