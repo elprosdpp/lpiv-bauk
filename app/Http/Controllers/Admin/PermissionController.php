@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PermissionStoreRequest;
 use App\Models\Permission;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -23,7 +25,7 @@ class PermissionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index() : Response
+    public function index(): Response
     {
         $permissions = (new Permission)->newQuery();
         $permissions->latest();
@@ -37,5 +39,15 @@ class PermissionController extends Controller
                 'delete' => Auth::user()->can('permission delete'),
             ]
         ]);
+    }
+
+    public function store(PermissionStoreRequest $request): RedirectResponse
+    {
+        $permissions = $request->validated();
+
+        \Spatie\Permission\Models\Permission::create($permissions);
+
+//        return to_route('role.index')->with("message", "Data Permission Berhasil Ditambah");
+        return back()->with("message", "Data Permission Berhasil Ditambah");
     }
 }

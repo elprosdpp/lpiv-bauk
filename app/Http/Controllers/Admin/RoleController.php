@@ -38,7 +38,7 @@ class RoleController extends Controller
 
         $roles = DB::table('view_index_permission_role')->when(Request::input('search'), function ($query, $search) {
             $query->where('name', 'like', '%' . $search . '%');
-        })->paginate(2)
+        })->paginate(10)
             ->withQueryString();
 
 //        dd($roles);
@@ -79,7 +79,6 @@ class RoleController extends Controller
     {
         $role = \Spatie\Permission\Models\Role::findById($id);
         $permission = Permission::pluck('name');
-        $permissionId = DB::table('view_permission_role')->where('role_id', $id)->get()->all();
         $permissionJSON = DB::table('view_permission_role')->where('role_id', $id)->select('name')->get();
 
 //       $data = $getID->toJson();
@@ -91,7 +90,6 @@ class RoleController extends Controller
         return Inertia::render('Admin/Role/Edit', [
             'role' => $role,
             'permission' => $permission,
-            'permissionId' => $permissionId,
             'permissionJSON' => $plucked
         ]);
     }
@@ -123,13 +121,13 @@ class RoleController extends Controller
         $permissions = $request->validated();
 //
         foreach ($permissions as $permission) {
-            $role->givePermissionTo($permission);
+            $role->syncPermissions($permission);
         }
 
 //        dd($permissions);
 //        $role->givePermissionTo($permissions);
-//        return to_route('role.index')->with("message", "Permission added.");
-        return back()->with('message', 'Permission ' . $role->name . ' Berhasil Ditambah');
+        return to_route('role.index')->with('message', 'Permission ' . $role->name . ' Berhasil Diubah');
+//        return back()->with('message', 'Permission ' . $role->name . ' Berhasil Ditambah');
     }
 
     public function revokePermission(Role $role, Permission $permission): RedirectResponse
