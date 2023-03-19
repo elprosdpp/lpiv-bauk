@@ -1,6 +1,6 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import {Head, Link, useForm, usePage} from '@inertiajs/vue3';
+import {Head, Link, router, useForm, usePage} from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
@@ -32,9 +32,20 @@ const props = defineProps({
 
 const form = useForm({
     name: props.user.name,
+    image_profile: null,
     role: props.roleJSON,
-    permission: props.permissionJSON
+    permission: props.permissionJSON,
 });
+
+function updateAvatar() {
+    router.post(`/admin/users/${props.user.id}`, {
+        _method: 'put',
+        name: form.name,
+        image_profile: form.image_profile,
+        role: form.role,
+        permission: form.permission
+    })
+}
 </script>
 
 <template>
@@ -58,7 +69,7 @@ const form = useForm({
 
 
                 <form class="flex flex-col mt-10"
-                      @submit.prevent="form.put(route('users.update', user.id))">
+                      @submit.prevent="updateAvatar">
                     <div>
                         <InputLabel for="name" value="Name"/>
                         <TextInput
@@ -71,6 +82,21 @@ const form = useForm({
                         />
                         <InputError :message="form.errors.name" class="mt-2"/>
                     </div>
+
+                    <div class="flex space-x-4 items-center mt-10">
+                        <img :src="`/storage/`+ props.user?.image_profile" alt=""
+                             class="w-48 mb-5 rounded-lg border-2 border-gray-700">
+                        <div class="mt-4">
+                            <InputLabel for="ImageProfil" value="Profile"/>
+
+                            <input
+                                id="ImageProfil"
+                                class="mt-1 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm dark:text-white"
+                                type="file" @input="form.image_profile = $event.target.files[0]"/>
+                        </div>
+                    </div>
+
+                    <InputError :message="form.errors.image_profile" class="mt-2"/>
 
                     <div class="mt-5">
                         <InputLabel class="mb-2" for="role" value="Role"/>

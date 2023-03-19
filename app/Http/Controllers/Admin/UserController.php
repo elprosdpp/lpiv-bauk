@@ -3,21 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\AssignRoleUserRequest;
-use App\Http\Requests\PermissionRequest;
-use App\Http\Requests\RoleRequest;
-use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Validation\Rules\Password;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
+
 
 class UserController extends Controller
 {
@@ -119,21 +117,33 @@ class UserController extends Controller
 
     public function update(Request $request, User $user): RedirectResponse
     {
-        //Validation Update
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'role' => ['sometimes', 'array'],
-            'permission' => ['sometimes', 'array']
-        ]);
-
         //Get 1 User
         $users = User::all();
         $data = $users->find($user);
 
-        //Update Data User Role & Permission
-        $data->update([
-            'name' => $request->name
+        //Validation Update
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'role' => ['sometimes', 'array'],
+            'permission' => ['sometimes', 'array'],
         ]);
+
+        //Update Data User Role & Permission
+//        dd($request->name);
+        if (\Illuminate\Support\Facades\Request::file('image_profile')) {
+            Storage::delete('public/' . $user->image_profile);
+            $image = \Illuminate\Support\Facades\Request::file('image_profile')->store('images', 'public');
+
+            $user->update([
+                'name' => \Illuminate\Support\Facades\Request::input('name'),
+                'image_profile' => $image
+            ]);
+        } else {
+            $user->update([
+                'name' => \Illuminate\Support\Facades\Request::input('name'),
+//                'image_profile' => $image
+            ]);
+        }
 
         //Update Role & Permission
         $user->syncRoles($request->input('role'));
@@ -152,7 +162,6 @@ class UserController extends Controller
 
         return back()->with("message", "Data User Berhasil Dihapus");
     }
-
 
 
 }
