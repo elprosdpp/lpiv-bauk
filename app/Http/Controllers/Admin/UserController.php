@@ -36,12 +36,17 @@ class UserController extends Controller
      */
     public function index(): Response
     {
-        $users = (new User)->newQuery();
-        $users->latest();
-        $users = $users->paginate(100)->onEachSide(2)->appends(request()->query());
+//        $users = (new User)->newQuery();
+//        $users->latest();
+//        $users = $users->paginate(100)->onEachSide(2)->appends(request()->query());
+        $users = DB::table('users')->when(\Illuminate\Support\Facades\Request::input('search'), function ($query, $search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        })->paginate(10)
+            ->withQueryString();
 
         return Inertia::render('Admin/User/Index', [
             'users' => $users,
+            'filters' => \Illuminate\Support\Facades\Request::only(['search']),
             'can' => [
                 'create' => Auth::user()->can('user create'),
                 'edit' => Auth::user()->can('user edit'),
