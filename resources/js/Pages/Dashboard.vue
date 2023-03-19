@@ -6,7 +6,7 @@ import AdminLayout from "../Layouts/AdminLayout.vue";
 
 import {ref} from 'vue'
 
-const permissions = usePage().props.user.permissions;
+const permissions = usePage().props.auth.permissions;
 
 
 </script>

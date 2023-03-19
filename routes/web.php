@@ -41,7 +41,7 @@ Route::group(['prefix' => '/admin', 'middleware' => 'auth'], function () {
 
 
     //Posts
-    Route::get('/posts', function (){
+    Route::get('/posts', function () {
         return Inertia::render('Posts');
     })->name('posts');
 
@@ -50,11 +50,12 @@ Route::group(['prefix' => '/admin', 'middleware' => 'auth'], function () {
 Route::group([
     'namespace' => 'App\Http\Controllers\Admin',
     'prefix' => 'admin',
-    'middleware' => ['auth', 'role:super-admin'],
+    'middleware' => ['auth'],
 ], function () {
-    Route::resource('user', 'UserController');
+    Route::resource('users', 'UserController');
     Route::resource('role', 'RoleController');
     Route::post('/role/{role}/permissions', [\App\Http\Controllers\Admin\RoleController::class, 'givePermission'])->name('role.permissions');
+    Route::post('/users/{users}/edit', [\App\Http\Controllers\Admin\UserController::class, 'assignRole'])->name('users.assignRole');
     Route::delete('/role/{role}/permissions/{permission}', [\App\Http\Controllers\Admin\RoleController::class, 'revokePermission'])->name('roles.permissions.revoke');
     Route::resource('permission', 'PermissionController');
     Route::resource('post', 'PostController');

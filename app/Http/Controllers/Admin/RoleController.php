@@ -43,6 +43,7 @@ class RoleController extends Controller
 
 //        dd($roles);
 
+
         return Inertia::render('Admin/Role/Index', [
             'roles' => $roles,
             'permission' => $permission,
@@ -53,6 +54,7 @@ class RoleController extends Controller
                 'delete' => Auth::user()->can('role delete'),
             ]
         ]);
+
     }
 
 

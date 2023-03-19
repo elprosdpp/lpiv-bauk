@@ -7,27 +7,39 @@ import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
 import Multiselect from '@vueform/multiselect'
 
-const users = usePage().props.auth.user;
+// const users = usePage().props.auth.user;
 
 const props = defineProps({
+    user: {
+        type: Object,
+        default: () => ({}),
+    },
     roles: {
         type: Object,
         default: () => ({}),
     },
+    permissions: {
+        type: Object,
+        default: () => ({}),
+    },
+    roleJSON: {
+        type: Object,
+    },
+    permissionJSON: {
+        type: Object,
+    },
 });
 
 const form = useForm({
-    name: '',
-    email: '',
-    password: '',
-    password_confirmation: '',
-    role: '',
+    name: props.user.name,
+    role: props.roleJSON,
+    permission: props.permissionJSON
 });
 </script>
 
 <template>
 
-    <Head title="Add User"/>
+    <Head title="Edit User"/>
 
     <AdminLayout>
         <div class="py-12">
@@ -45,8 +57,9 @@ const form = useForm({
                 </Link>
 
 
-                <form class="flex flex-col mt-10" @submit.prevent="form.post(route('users.store'))">
-                    <div class="mb-5">
+                <form class="flex flex-col mt-10"
+                      @submit.prevent="form.put(route('users.update', user.id))">
+                    <div>
                         <InputLabel for="name" value="Name"/>
                         <TextInput
                             id="name"
@@ -59,55 +72,38 @@ const form = useForm({
                         <InputError :message="form.errors.name" class="mt-2"/>
                     </div>
 
-                    <div class="mb-5">
-                        <InputLabel for="email" value="Email"/>
-                        <TextInput
-                            id="name"
-                            v-model="form.email"
-                            autocomplete="email"
-                            autofocus
-                            class="mt-1 block w-full"
-                            type="email"
-                        />
-                        <InputError :message="form.errors.email" class="mt-2"/>
-                    </div>
-
-                    <div class="mb-5">
-                        <InputLabel for="password" value="Password"/>
-                        <TextInput
-                            id="name"
-                            v-model="form.password"
-                            autocomplete="password"
-                            autofocus
-                            class="mt-1 block w-full"
-                            type="password"
-                        />
-                        <InputError :message="form.errors.password" class="mt-2"/>
-                    </div>
-
-                    <div class="mb-5">
-                        <InputLabel for="password_confirmation" value="Confirm Password"/>
-
-                        <TextInput
-                            id="password_confirmation"
-                            v-model="form.password_confirmation"
-                            autocomplete="new-password"
-                            class="mt-1 block w-full"
-                            required
-                            type="password"
-                        />
-
-                        <InputError :message="form.errors.password_confirmation" class="mt-2"/>
-                    </div>
-
-                    <div>
-                        <InputLabel for="role" value="Role" class="mb-2"/>
+                    <div class="mt-5">
+                        <InputLabel class="mb-2" for="role" value="Role"/>
                         <multiselect
                             v-model="form.role"
+                            :allow-absent="true"
+                            :close-on-select="false"
+                            :hideSelected="true"
                             :options="props.roles"
-                            placeholder="Select Role">
+                            :searchable="true"
+                            label="role"
+                            mode="tags"
+                            placeholder="Select Role"
+                            track-by="name">
                         </multiselect>
                         <InputError :message="form.errors.role" class="mt-2"/>
+                    </div>
+
+                    <div class="mt-5">
+                        <InputLabel class="mb-2" for="permission" value="Permission"/>
+                        <multiselect
+                            v-model="form.permission"
+                            :allow-absent="true"
+                            :close-on-select="false"
+                            :hideSelected="true"
+                            :options="props.permissions"
+                            :searchable="true"
+                            label="permission"
+                            mode="tags"
+                            placeholder="Select Permission"
+                            track-by="name">
+                        </multiselect>
+                        <InputError :message="form.errors.permission" class="mt-2"/>
                     </div>
 
                     <div class="flex items-center gap-4 mt-4">

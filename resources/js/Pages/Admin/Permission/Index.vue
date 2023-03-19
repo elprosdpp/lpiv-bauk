@@ -1,8 +1,9 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import {Head, Link, useForm} from '@inertiajs/vue3';
+import {Head, Link, router, useForm} from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import {ref} from "vue";
+import Pagination from "@/Components/Pagination.vue";
+import {ref, watch} from "vue";
 
 import {
     TransitionRoot,
@@ -21,7 +22,13 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
+    filters: {
+        type: Object,
+        default: () => ({}),
+    },
 });
+
+const search = ref(props.filters?.search);
 
 const form = useForm({
     name: '',
@@ -46,6 +53,17 @@ const storePermission = () => {
         },
     });
 };
+
+watch(search, (value) => {
+    router.get(
+        "/admin/permission",
+        {search: value},
+        {
+            preserveState: true,
+            replace: true,
+        }
+    );
+});
 
 </script>
 
@@ -77,7 +95,7 @@ const storePermission = () => {
                             </div>
                             <input v-model="search"
                                    class="block w-full p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   placeholder="Search Roles..."
+                                   placeholder="Search Permission..."
                                    required type="search">
                         </div>
                     </div>
@@ -88,13 +106,17 @@ const storePermission = () => {
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
+                            <th class="py-3 px-6" scope="col">No</th>
                             <th class="py-3 px-6" scope="col">Name</th>
                             <th v-if="can.edit || can.delete" class="py-3 px-6" scope="col">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="permission in permissions.data" :key="permission.id"
+                        <tr v-for="(permission, index) in permissions.data" :key="index"
                             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <td class="py-4 px-6" data-label="Name">
+                                {{ props.permissions.from + index }}
+                            </td>
                             <td class="py-4 px-6" data-label="Name">
                                 {{ permission.name }}
                             </td>
@@ -135,6 +157,7 @@ const storePermission = () => {
                         </tbody>
                     </table>
                 </div>
+                <Pagination :data="props?.permissions"/>
             </div>
 
 
