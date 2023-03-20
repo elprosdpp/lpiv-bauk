@@ -7,6 +7,8 @@ use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -22,12 +24,17 @@ class CategoryController extends Controller
 
     public function index(): Response
     {
-        $category = (new Category)->newQuery();
-        $category->latest();
-        $category = $category->paginate(100)->onEachSide(2)->appends(request()->query());
+//        $category = (new Category)->newQuery();
+//        $category->latest();
+//        $category = $category->paginate(100)->onEachSide(2)->appends(request()->query());
+        $category = DB::table('categories')->when(Request::input('search'), function ($query, $search) {
+            $query->where('name', 'like', '%' . $search . '%');
+        })->paginate(10)
+            ->withQueryString();
 
         return Inertia::render('Admin/Category/Index', [
             'category' => $category,
+            'filters' => Request::only(['search']),
             'can' => [
                 'create' => Auth::user()->can('category create'),
                 'edit' => Auth::user()->can('category edit'),

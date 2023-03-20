@@ -1,6 +1,6 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import {Head, Link, useForm} from '@inertiajs/vue3';
+import {Head, Link, router, useForm} from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import {
     TransitionRoot,
@@ -9,7 +9,8 @@ import {
     DialogPanel,
     DialogTitle,
 } from '@headlessui/vue';
-import {computed, ref} from "vue";
+import {computed, ref, watch} from "vue";
+import Pagination from "@/Components/Pagination.vue";
 
 const isOpen = ref(false);
 const name = ref('');
@@ -23,7 +24,13 @@ const props = defineProps({
         type: Object,
         default: () => ({}),
     },
+    filters: {
+        type: Object,
+        default: () => ({}),
+    },
 });
+
+const search = ref(props.filters?.search);
 
 const slugAble = computed(() => {
     return name.value
@@ -55,6 +62,17 @@ function openModal() {
     isOpen.value = true;
 }
 
+watch(search, (value) => {
+    router.get(
+        "/admin/category",
+        {search: value},
+        {
+            preserveState: true,
+            replace: true,
+        }
+    );
+});
+
 </script>
 
 <template>
@@ -85,10 +103,10 @@ function openModal() {
                                           stroke-width="2"></path>
                                 </svg>
                             </div>
-                            <!--                            <input v-model="search"-->
-                            <!--                                   class="block w-full p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"-->
-                            <!--                                   placeholder="Search Users..."-->
-                            <!--                                   required type="search">-->
+                            <input v-model="search"
+                                   class="block w-full p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                   placeholder="Search Users..."
+                                   required type="search">
                         </div>
                     </div>
                 </div>
@@ -149,6 +167,7 @@ function openModal() {
                         </tbody>
                     </table>
                 </div>
+                <Pagination :data="props?.roles"/>
             </div>
         </div>
 
