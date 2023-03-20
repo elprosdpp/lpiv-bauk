@@ -256,6 +256,18 @@ function openModal() {
                                 </Disclosure>
                             </li>
                             <li>
+                                <ResponsiveSideLink :active="route().current('category.index')" :href="route('category.index')">
+                                    <svg
+                                        :class="route().current('post.index') ? 'w-6 h-6 text-gray-900 transition duration-75 group-hover:text-gray-900 dark:text-gray-100 dark:group-hover:text-white' : 'w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white'"
+                                        aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path clip-rule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm2.25 8.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 3a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z"
+                                              fill-rule="evenodd"></path>
+                                    </svg>
+                                    <span class="ml-3" sidebar-toggle-item="">Category</span>
+                                </ResponsiveSideLink>
+                            </li>
+                            <li>
                                 <ResponsiveSideLink :active="route().current('post.index')" :href="route('post.index')">
                                     <svg
                                         :class="route().current('post.index') ? 'w-6 h-6 text-gray-900 transition duration-75 group-hover:text-gray-900 dark:text-gray-100 dark:group-hover:text-white' : 'w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white'"

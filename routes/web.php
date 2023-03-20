@@ -54,6 +54,7 @@ Route::group([
 ], function () {
     Route::resource('users', 'UserController');
     Route::resource('role', 'RoleController');
+    Route::resource('category', 'CategoryController');
     Route::post('/role/{role}/permissions', [\App\Http\Controllers\Admin\RoleController::class, 'givePermission'])->name('role.permissions');
     Route::post('/users/{users}', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
     Route::delete('/role/{role}/permissions/{permission}', [\App\Http\Controllers\Admin\RoleController::class, 'revokePermission'])->name('roles.permissions.revoke');
