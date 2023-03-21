@@ -2,6 +2,7 @@
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import {Head, Link, router, useForm} from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
+import InputError from '@/Components/InputError.vue';
 import {
     TransitionRoot,
     TransitionChild,
@@ -146,7 +147,7 @@ watch(search, (value) => {
                                                 stroke-linejoin="round"></path>
                                         </svg>
                                     </Link>
-                                    <Link v-if="can.edit"
+                                    <Link v-if="can.delete"
                                           :href="route('category.destroy', category.id)"
                                           as="button"
                                           class="ml-4 bg-red-500 px-2 py-1 rounded text-white cursor-pointer"
@@ -232,6 +233,7 @@ watch(search, (value) => {
                                                            name="name"
                                                            placeholder="News | Information"
                                                            required type="text">
+                                                    <InputError :message="form.errors.name" class="mt-2"/>
                                                 </div>
 
                                                 <div>
