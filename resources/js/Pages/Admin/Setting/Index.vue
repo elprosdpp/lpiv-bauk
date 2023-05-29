@@ -39,8 +39,6 @@ const form = useForm({});
                     </svg>
                     Setting
                 </p>
-
-
                 <hr class="w-1/2 my-5 border-gray-500">
             </div>
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-2">
@@ -67,7 +65,6 @@ const form = useForm({});
                                     id="title"
                                     autocomplete="name"
                                     placeholder="Username/Login"
-                                    autofocus
                                     class="mt-1 block w-full"
                                     type="text"
                                 />
@@ -80,7 +77,6 @@ const form = useForm({});
                                     id="title"
                                     autocomplete="name"
                                     placeholder="********"
-                                    autofocus
                                     class="mt-1 block w-full"
                                     type="text"
                                 />
