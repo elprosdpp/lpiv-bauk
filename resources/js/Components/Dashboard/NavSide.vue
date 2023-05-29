@@ -203,7 +203,9 @@ function openModal() {
                                 <!--                                    <span class="ml-3" sidebar-toggle-item="">Dashboard</span>-->
                                 <!--                                </Link>-->
                                 <ResponsiveSideLink :active="route().current('dashboard')" :href="route('dashboard')">
-                                    <svg :class="route().current('dashboard') ? 'w-6 h-6 text-gray-900 transition duration-75 group-hover:text-gray-900 dark:text-gray-100 dark:group-hover:text-white' : 'w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white'" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                                    <svg
+                                        :class="route().current('dashboard') ? 'w-6 h-6 text-gray-900 transition duration-75 group-hover:text-gray-900 dark:text-gray-100 dark:group-hover:text-white' : 'w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white'"
+                                        fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                                         <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z"></path>
                                         <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z"></path>
                                     </svg>
@@ -256,12 +258,14 @@ function openModal() {
                                 </Disclosure>
                             </li>
                             <li>
-                                <ResponsiveSideLink :active="route().current('category.index')" :href="route('category.index')">
+                                <ResponsiveSideLink :active="route().current('category.index')"
+                                                    :href="route('category.index')">
                                     <svg
                                         :class="route().current('category.index') ? 'w-6 h-6 text-gray-900 transition duration-75 group-hover:text-gray-900 dark:text-gray-100 dark:group-hover:text-white' : 'w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white'"
                                         aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path clip-rule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm2.25 8.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 3a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z"
+                                        <path clip-rule="evenodd"
+                                              d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm2.25 8.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 3a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z"
                                               fill-rule="evenodd"></path>
                                     </svg>
                                     <span class="ml-3" sidebar-toggle-item="">Category</span>
@@ -273,10 +277,26 @@ function openModal() {
                                         :class="route().current('post.index') ? 'w-6 h-6 text-gray-900 transition duration-75 group-hover:text-gray-900 dark:text-gray-100 dark:group-hover:text-white' : 'w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white'"
                                         aria-hidden="true" fill="currentColor" viewBox="0 0 20 20"
                                         xmlns="http://www.w3.org/2000/svg">
-                                        <path clip-rule="evenodd" d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm2.25 8.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 3a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z"
+                                        <path clip-rule="evenodd"
+                                              d="M4.5 2A1.5 1.5 0 003 3.5v13A1.5 1.5 0 004.5 18h11a1.5 1.5 0 001.5-1.5V7.621a1.5 1.5 0 00-.44-1.06l-4.12-4.122A1.5 1.5 0 0011.378 2H4.5zm2.25 8.5a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5zm0 3a.75.75 0 000 1.5h6.5a.75.75 0 000-1.5h-6.5z"
                                               fill-rule="evenodd"></path>
                                     </svg>
                                     <span class="ml-3" sidebar-toggle-item="">Post</span>
+                                </ResponsiveSideLink>
+                            </li>
+                            <li>
+                                <ResponsiveSideLink :active="route().current('setting.index')"
+                                                    :href="route('setting.index')">
+                                    <svg
+                                        :class="route().current('setting.index') ? 'w-6 h-6 text-gray-900 transition duration-75 group-hover:text-gray-900 dark:text-gray-100 dark:group-hover:text-white' : 'w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white'"
+                                        xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                        class="w-6 h-6">
+                                        <path fill-rule="evenodd"
+                                              d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 00-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 00-2.282.819l-.922 1.597a1.875 1.875 0 00.432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 000 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 00-.432 2.385l.922 1.597a1.875 1.875 0 002.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 002.28-.819l.923-1.597a1.875 1.875 0 00-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 000-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 00-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 00-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 00-1.85-1.567h-1.843zM12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z"
+                                              clip-rule="evenodd"/>
+                                    </svg>
+
+                                    <span class="ml-3" sidebar-toggle-item="">Setting</span>
                                 </ResponsiveSideLink>
                             </li>
                         </ul>

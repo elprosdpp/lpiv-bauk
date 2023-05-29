@@ -60,6 +60,7 @@ Route::group([
     Route::delete('/role/{role}/permissions/{permission}', [\App\Http\Controllers\Admin\RoleController::class, 'revokePermission'])->name('roles.permissions.revoke');
     Route::resource('permission', 'PermissionController');
     Route::resource('post', 'PostController');
+    Route::resource('setting', 'SettingController');
 });
 
 
