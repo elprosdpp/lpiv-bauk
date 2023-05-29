@@ -288,7 +288,7 @@ function openModal() {
                                 <ResponsiveSideLink :active="route().current('setting.index')"
                                                     :href="route('setting.index')">
                                     <svg
-                                        :class="route().current('setting.index') ? 'w-6 h-6 text-gray-900 transition duration-75 group-hover:text-gray-900 dark:text-gray-100 dark:group-hover:text-white' : 'w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white'"
+                                        :class="route().current('setting.index') ? 'w-6 h-6 text-gray-900 transition duration-75 group-hover:text-gray-900 dark:text-gray-100 dark:group-hover:text-white hover:animate-spin' : 'w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white hover:animate-spin'"
                                         xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                         class="w-6 h-6">
                                         <path fill-rule="evenodd"
