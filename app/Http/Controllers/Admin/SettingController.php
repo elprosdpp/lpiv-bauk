@@ -59,7 +59,7 @@ class SettingController extends Controller
         $create = Setting::create($request->validated());
 
         //Redirect Back
-        return to_route('setting.index')->with("message", "Berhasil Mengubah Setting");
+        return to_route('setting.index')->with("message", "Berhasil Menambah Setting IP Address");
     }
 
 
@@ -84,7 +84,7 @@ class SettingController extends Controller
     }
 
     //Delete Store Form
-    public function delete($id): RedirectResponse
+    public function destroy($id): RedirectResponse
     {
         //Get Setting By ID
         $allSetting = Setting::all();
