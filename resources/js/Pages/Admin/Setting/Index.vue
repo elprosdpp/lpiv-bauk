@@ -1,99 +1,115 @@
 <script setup>
 import AdminLayout from "@/Layouts/AdminLayout.vue";
-import {Head, Link, router, useForm} from '@inertiajs/vue3';
-import InputLabel from '@/Components/InputLabel.vue';
-import TextInput from '@/Components/TextInput.vue';
+import {Head, Link} from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import Pagination from "@/Components/Pagination.vue";
-import {ref, watch} from "vue";
-
 
 const props = defineProps({
-    // users: {
-    //     type: Object,
-    //     default: () => ({}),
-    // },
+    settings: {
+        type: Object,
+        default: () => ({}),
+    },
     can: {
         type: Object,
         default: () => ({}),
     },
-});
-
-
-const form = useForm({});
-
+})
 </script>
 
 <template>
-    <Head title="Setting"/>
+
+    <Head title="Setting List"/>
+
 
     <AdminLayout>
+
         <div class="py-12">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <p class="text-2xl font-bold text-gray-700 inline-flex items-center dark:text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
-                         class="w-6 h-6 mr-2 animate-spin">
-                        <path fill-rule="evenodd"
-                              d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 00-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 00-2.282.819l-.922 1.597a1.875 1.875 0 00.432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 000 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 00-.432 2.385l.922 1.597a1.875 1.875 0 002.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 002.28-.819l.923-1.597a1.875 1.875 0 00-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 000-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 00-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 00-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 00-1.85-1.567h-1.843zM12 15.75a3.75 3.75 0 100-7.5 3.75 3.75 0 000 7.5z"
-                              clip-rule="evenodd"/>
-                    </svg>
-                    Setting
-                </p>
-                <hr class="w-1/2 my-5 border-gray-500">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-5">
+                <div class="overflow-hidden sm:rounded-lg">
+                    <div class="flex justify-between items-center">
+                        <div v-if="can.create" class="flex space-x-2 items-center">
+                            <Link :href="route('setting.create')"
+                                  class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+                            >
+                                Tambah IP Address
+                            </Link>
+                        </div>
+
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none"
+                                     stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round"
+                                          stroke-linejoin="round"
+                                          stroke-width="2"></path>
+                                </svg>
+                            </div>
+                            <!--                            <input v-model="search"-->
+                            <!--                                   class="block w-full p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"-->
+                            <!--                                   placeholder="Search Users..."-->
+                            <!--                                   required type="search">-->
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-2">
-                <div class="overflow-hidden shadow-sm sm:rounded-lg">
-                    <form class="flex flex-col gap-2 mt-10" @submit.prevent="">
-                        <div class="w-1/2">
-                            <input hidden type="text">
-                            <div class="mb-5">
-                                <InputLabel for="title" value="IP Address"/>
-                                <TextInput
-                                    id="title"
-                                    autocomplete="name"
-                                    placeholder="IP Address"
-                                    autofocus
-                                    class="mt-1 block w-full"
-                                    type="text"
-                                />
-                            </div>
-                        </div>
-                        <div class="w-1/2">
-                            <div class="mb-5 ">
-                                <InputLabel for="title" value="Username/Login"/>
-                                <TextInput
-                                    id="title"
-                                    autocomplete="name"
-                                    placeholder="Username/Login"
-                                    class="mt-1 block w-full"
-                                    type="text"
-                                />
-                            </div>
-                        </div>
-                        <div class="w-1/2">
-                            <div class="mb-5 ">
-                                <InputLabel for="title" value="Password"/>
-                                <TextInput
-                                    id="title"
-                                    autocomplete="name"
-                                    placeholder="********"
-                                    class="mt-1 block w-full"
-                                    type="text"
-                                />
-                            </div>
-                        </div>
-
-                        <div class="flex items-center gap-4 mt-4">
-                            <PrimaryButton :disabled="form.processing">Save</PrimaryButton>
-
-                            <Transition class="transition ease-in-out" enter-from-class="opacity-0"
-                                        leave-to-class="opacity-0">
-                                <p v-if="form.recentlySuccessful" class="text-sm text-gray-600">Saved.</p>
-                            </Transition>
-                        </div>
-                    </form>
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                        <tr>
+                            <th class="py-3 px-6" scope="col">IP Address</th>
+                            <th class="py-3 px-6" scope="col">Username</th>
+                            <th v-if="can.edit || can.delete" class="py-3 px-6" scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="setting in settings.data" :key="setting.id"
+                            class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                            <td class="py-4 px-6" data-label="Title">
+                                {{ setting.ip_address_router }}
+                            </td>
+                            <td class="py-4 px-6" data-label="Title">
+                                <!--                                <span v-html="post.description"></span>-->
+                                {{ setting.username_router }}
+                            </td>
+                            <td
+                                v-if="can.edit || can.delete"
+                                class="py-4 px-6 w-48"
+                            >
+                                <div class="flex space-x-2">
+                                    <Link v-if="can.edit"
+                                          :href="route('setting.edit', setting.id)"
+                                          class="ml-4 bg-blue-500 px-2 py-1 rounded text-white cursor-pointer">
+                                        <svg aria-hidden="true" class="w-4 h-4" fill="none" stroke="currentColor"
+                                             stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"></path>
+                                        </svg>
+                                    </Link>
+                                    <Link v-if="can.delete"
+                                          :href="route('setting.destroy', setting.id)"
+                                          as="button"
+                                          class="ml-4 bg-red-500 px-2 py-1 rounded text-white cursor-pointer"
+                                          method="DELETE"
+                                          onclick="return confirm('Yakin Akan Menghapus Data Ini?')">
+                                        <svg aria-hidden="true" class="w-4 h-4" fill="none" stroke="currentColor"
+                                             stroke-width="1.5"
+                                             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                            <path
+                                                d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"></path>
+                                        </svg>
+                                    </Link>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
     </AdminLayout>
+
 </template>
