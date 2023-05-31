@@ -5,28 +5,63 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
+
+//use GuzzleHttp\Client;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+
+//use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use \RouterOS\Client;
+use RouterOS\Exceptions\BadCredentialsException;
+use RouterOS\Exceptions\ClientException;
+use RouterOS\Exceptions\ConfigException;
+use RouterOS\Exceptions\ConnectException;
+use RouterOS\Exceptions\QueryException;
+use \RouterOS\Query;
+
 
 class CategoryController extends Controller
 {
+
     public function __construct()
     {
         $this->middleware('can:category list', ['only' => ['index', 'show']]);
         $this->middleware('can:category create', ['only' => ['create', 'store']]);
         $this->middleware('can:category edit', ['only' => ['edit', 'update']]);
         $this->middleware('can:category delete', ['only' => ['destroy']]);
+
     }
 
+    /**
+     * @throws ClientException
+     * @throws ConnectException
+     * @throws QueryException
+     * @throws BadCredentialsException
+     * @throws ConfigException
+     */
     public function index(): Response
     {
-//        $category = (new Category)->newQuery();
-//        $category->latest();
-//        $category = $category->paginate(100)->onEachSide(2)->appends(request()->query());
+        $client = new Client([
+            'host' => '172.16.0.1',
+            'user' => 'admin',
+            'pass' => 'bptik@unw2023',
+            'port' => 8728,
+        ]);
+
+        $query = new Query('/system/resource/cpu/print');
+
+        // Send query and read response from RouterOS
+        $response = $client->query($query)->read();
+        response()->json($response);
+//        dd(response()->json($response));
+
+//        dd($response);
+
         $category = DB::table('categories')->when(Request::input('search'), function ($query, $search) {
             $query->where('name', 'like', '%' . $search . '%');
         })->paginate(10)
@@ -35,6 +70,7 @@ class CategoryController extends Controller
         return Inertia::render('Admin/Category/Index', [
             'category' => $category,
             'filters' => Request::only(['search']),
+            'response' => $response,
             'can' => [
                 'create' => Auth::user()->can('category create'),
                 'edit' => Auth::user()->can('category edit'),
@@ -83,5 +119,6 @@ class CategoryController extends Controller
         $getCategory->delete();
         return back()->with('message', "Data Kategory Berhasil Dihapus");
     }
+
 
 }

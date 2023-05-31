@@ -13,6 +13,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use RouterOS\Client;
+use RouterOS\Exceptions\BadCredentialsException;
+use RouterOS\Exceptions\ClientException;
+use RouterOS\Exceptions\ConfigException;
+use RouterOS\Exceptions\ConnectException;
+use RouterOS\Exceptions\QueryException;
+use RouterOS\Query;
 
 class SettingController extends Controller
 {
@@ -22,6 +29,26 @@ class SettingController extends Controller
         $this->middleware('can:user create', ['only' => ['create', 'store']]);
         $this->middleware('can:user edit', ['only' => ['edit', 'update']]);
         $this->middleware('can:user delete', ['only' => ['destroy']]);
+    }
+
+
+    /**
+     * @throws ClientException
+     * @throws ConnectException
+     * @throws QueryException
+     * @throws BadCredentialsException
+     * @throws ConfigException
+     */
+
+    private function mikrotik($getIP): Client
+    {
+        return new Client([
+            'host' => $getIP->ip_address_router,
+            'user' => $getIP->username_router,
+            'pass' => $getIP->password_router,
+            'port' => 8728,
+            'timeout' => 10
+        ]);
     }
 
     /**
@@ -105,6 +132,29 @@ class SettingController extends Controller
         //Update Data By ID
         $getSetting->update($request->validated());
         return to_route('setting.index')->with("message", "Data Setting Berhasil Diubah");
+    }
+
+    /**
+     * @throws ClientException
+     * @throws ConnectException
+     * @throws BadCredentialsException
+     * @throws QueryException
+     * @throws ConfigException
+     */
+    public function monitor(): \Illuminate\Http\JsonResponse
+    {
+        $user = Auth::user();
+
+        $getAllIP = Setting::all();
+        $getIP = $getAllIP->find($user);
+
+        $client = $this->mikrotik($getIP);
+
+        $query = new Query('/system/resource/print');
+
+        // Send query and read response from RouterOS
+        $response = $client->query($query)->read();
+        return response()->json($response);
     }
 
 }

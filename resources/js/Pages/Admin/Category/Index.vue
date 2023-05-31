@@ -10,8 +10,11 @@ import {
     DialogPanel,
     DialogTitle,
 } from '@headlessui/vue';
-import {computed, ref, watch} from "vue";
+import {computed, onMounted, ref, watch, onUnmounted} from "vue";
 import Pagination from "@/Components/Pagination.vue";
+import {set, useInterval} from '@vueuse/core'
+import axios from "axios";
+
 
 const isOpen = ref(false);
 const name = ref('');
@@ -22,6 +25,10 @@ const props = defineProps({
         default: () => ({}),
     },
     can: {
+        type: Object,
+        default: () => ({}),
+    },
+    response: {
         type: Object,
         default: () => ({}),
     },
