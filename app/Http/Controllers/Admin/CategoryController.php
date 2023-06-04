@@ -46,19 +46,24 @@ class CategoryController extends Controller
      */
     public function index(): Response
     {
-        $client = new Client([
-            'host' => '172.16.0.1',
-            'user' => 'admin',
-            'pass' => 'bptik@unw2023',
-            'port' => 8728,
-        ]);
+//        $client = new Client([
+//            'host' => '172.16.0.1',
+//            'user' => 'admin',
+//            'pass' => 'bptik@unw2023',
+//            'port' => 8728,
+//        ]);
 
-        $query = new Query('/system/resource/cpu/print');
+//        $query =
+//            (new Query('/interface/monitor-traffic'))
+//                ->equal('interface', 'ether1')
+//                ->equal('once');
+
+//        $query = new Query('/system/resource/cpu/print');
 
         // Send query and read response from RouterOS
-        $response = $client->query($query)->read();
-        response()->json($response);
-//        dd(response()->json($response));
+//        $response = $client->query($query)->read();
+//        response()->json($response);
+//        dd($response);
 
 //        dd($response);
 
@@ -70,7 +75,7 @@ class CategoryController extends Controller
         return Inertia::render('Admin/Category/Index', [
             'category' => $category,
             'filters' => Request::only(['search']),
-            'response' => $response,
+//            'response' => $response,
             'can' => [
                 'create' => Auth::user()->can('category create'),
                 'edit' => Auth::user()->can('category edit'),
