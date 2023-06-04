@@ -33,25 +33,6 @@ class SettingController extends Controller
 
 
     /**
-     * @throws ClientException
-     * @throws ConnectException
-     * @throws QueryException
-     * @throws BadCredentialsException
-     * @throws ConfigException
-     */
-
-    private function mikrotik($getIP): Client
-    {
-        return new Client([
-            'host' => $getIP->ip_address_router,
-            'user' => $getIP->username_router,
-            'pass' => $getIP->password_router,
-            'port' => 8728,
-            'timeout' => 10
-        ]);
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * //     @return \Illuminate\Http\Response
@@ -132,29 +113,6 @@ class SettingController extends Controller
         //Update Data By ID
         $getSetting->update($request->validated());
         return to_route('setting.index')->with("message", "Data Setting Berhasil Diubah");
-    }
-
-    /**
-     * @throws ClientException
-     * @throws ConnectException
-     * @throws BadCredentialsException
-     * @throws QueryException
-     * @throws ConfigException
-     */
-    public function monitor(): \Illuminate\Http\JsonResponse
-    {
-        $user = Auth::user();
-
-        $getAllIP = Setting::all();
-        $getIP = $getAllIP->find($user);
-
-        $client = $this->mikrotik($getIP);
-
-        $query = new Query('/system/resource/print');
-
-        // Send query and read response from RouterOS
-        $response = $client->query($query)->read();
-        return response()->json($response);
     }
 
 }

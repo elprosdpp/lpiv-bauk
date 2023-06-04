@@ -5,7 +5,7 @@ import {router, usePage} from '@inertiajs/vue3'
 import ToastItem from "@/Components/ToastItem.vue";
 
 
-const isToast = ref(false);
+let isToast = ref(false);
 
 const page = usePage();
 
