@@ -40,14 +40,14 @@ const data = {
 }
 
 const config = {
-    type: 'line',
+    type: props.chartType,
     data: data,
     options: {
         responsive: true,
         plugins: {
             title: {
                 display: true,
-                text: 'Datasets = /1024',
+                text: 'Datasets = /1024 | in Byte',
             }
         }
     }

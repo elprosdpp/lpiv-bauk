@@ -61,6 +61,7 @@ Route::group([
     Route::delete('/role/{role}/permissions/{permission}', [\App\Http\Controllers\Admin\RoleController::class, 'revokePermission'])->name('roles.permissions.revoke');
     Route::get('/dashboard/resource', [\App\Http\Controllers\Admin\DashboardController::class, 'resource'])->name('dashboard.resource');
     Route::get('/dashboard/interface', [\App\Http\Controllers\Admin\DashboardController::class, 'interface'])->name('dashboard.interface');
+    Route::get('/dashboard/ether1', [\App\Http\Controllers\Admin\DashboardController::class, 'ether1'])->name('dashboard.ether1');
     Route::resource('permission', 'PermissionController');
     Route::resource('post', 'PostController');
     Route::resource('setting', 'SettingController');

@@ -1,14 +1,27 @@
 <script setup>
-import {getInterfaces} from "@/Service/Service.js";
-import {onMounted, ref, watchEffect} from 'vue'
+import {getInterfaces, getEtherOnes} from "@/Service/Service.js";
+import {onMounted, ref} from 'vue'
 import ChartComp from '@/Components/Dashboard/ChartComponent.vue'
+import EtherComp from '@/Pages/Admin/Dashboard/Ethernet.vue'
+import axios from "axios";
 
 const int = ref([])
+const ether = ref()
+const ether1 = ref([])
 
 const getInterface = () => {
     getInterfaces()
         .then(response => {
             int.value = response
+        })
+        .catch(error => console.log(error))
+}
+
+const getEtherOne = () => {
+    getEtherOnes()
+        .then(response => {
+            ether.value = response[0]['tx-bits-per-second']
+            ether1.value = response
         })
         .catch(error => console.log(error))
 }
@@ -25,13 +38,61 @@ function format(speed) {
 
 // const txFormat = format([txByte]);
 
-onMounted(() => {
+const token = '5674683976:AAHH4vxSsjTGs8IhM-dxbQHVHNwMKVUoYnE'
+const chatId = '1252436667'
+const message = "😊 Data Ether 2 Lebih Dari 90Kbps"
+
+function submitForm() {
+    axios({
+        method: 'post',
+        url: `https://api.telegram.org/bot${token}/sendMessage`,
+        data: {
+            chat_id: chatId,
+            text: message,
+            parse_mode: 'html',
+        },
+        headers: {"Content-Type": "application/json"},
+    }).then(response => {
+        console.log(response)
+    }).catch(error => {
+        console.log(error)
+    })
+}
+
+
+function sendAlert() {
+    if (ether) {
+        if (parseInt(ether.value) >= 90000) {
+            submitForm()
+        } else {
+
+        }
+    }
+}
+
+const queryURL = ref('/admin/dashboard');
+
+if (window.location.pathname == queryURL.value) {
+    setInterval(function () {
+        getEtherOne()
+    }, 1000);
+
+    setInterval(function () {
+        sendAlert()
+    }, 10000);
+    
     setInterval(getInterface, 1000)
+}
+
+onMounted(() => {
     format()
 })
 </script>
 
 <template>
+
+    <p class="text-white" v-if="ether">Ether 2 : {{ ether }} |
+        {{ format(ether) }}</p>
     <div class="mb-5 sm:rounded-lg border-2 p-2 border-gray-100 dark:border-gray-700">
         <div
             class="p-4 rounded-t-md font-bold text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -56,12 +117,6 @@ onMounted(() => {
                         <th scope="col" class="px-5 py-3">
                             Rx Byte
                         </th>
-                        <!--                <th scope="col" class="px-6 py-3">-->
-                        <!--                    Type-->
-                        <!--                </th>-->
-                        <!--                <th scope="col" class="px-6 py-3">-->
-                        <!--                    Running-->
-                        <!--                </th>-->
                     </tr>
                     </thead>
                     <tbody>
@@ -76,16 +131,17 @@ onMounted(() => {
                         <td class="px-5 py-3">
                             {{ format(int["rx-byte"]) }}
                         </td>
-                        <!--                <td class="px-6 py-4">-->
-                        <!--                    {{ int.type }}-->
-                        <!--                </td>-->
-                        <!--                <td class="px-6 py-4">-->
-                        <!--                    {{ int.running }}-->
-                        <!--                </td>-->
                     </tr>
                     </tbody>
                 </table>
             </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4-">
+        <div class="" v-if="ether">
+            <!--            <ChartComp :chartLabels="['Test']" :chartDataTX="[ether]" :chartDataRX="['15']" chartType="bar"/>-->
+            <EtherComp></EtherComp>
         </div>
     </div>
 </template>

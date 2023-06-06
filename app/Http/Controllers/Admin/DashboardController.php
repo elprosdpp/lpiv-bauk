@@ -36,13 +36,6 @@ class DashboardController extends Controller
         ]);
     }
 
-//    public function index(): Response
-//    {
-//
-//        return Inertia::render('Dashboard');
-//
-//    }
-
     /**
      * @throws ClientException
      * @throws ConnectException
@@ -91,6 +84,35 @@ class DashboardController extends Controller
         return response()->json([
             'interface' => $interface,
         ]);
+
+    }
+
+    /**
+     * @throws ClientException
+     * @throws ConnectException
+     * @throws BadCredentialsException
+     * @throws QueryException
+     * @throws ConfigException
+     */
+    public function ether1(): \Illuminate\Http\JsonResponse
+    {
+        $user = Auth::user();
+
+        $getAllIP = Setting::all();
+        $getIP = $getAllIP->find($user);
+
+        $client = $this->mikrotik($getIP);
+
+        $query = (new Query('/interface/monitor-traffic'))
+            ->equal('interface', 'ether2')
+            ->equal('once');
+
+        // Ask for monitoring details
+        $out = $client->query($query)->read();
+
+
+        // Send query and read response from RouterOS
+        return response()->json($out);
 
     }
 

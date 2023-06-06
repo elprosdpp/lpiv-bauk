@@ -24,7 +24,8 @@ watchEffect(() => setInterval(getResource, 5000));
 </script>
 
 <template>
-    <div class="grid grid-cols-3 gap-4 mb-4" v-for="data in data" :key="data.id">
+    <div class="grid grid-cols-3 gap-4 mb-4 sm:rounded-lg border-2 p-2 border-gray-100 dark:border-gray-700"
+         v-for="data in data" :key="data.id">
         <div class="h-24 rounded bg-gray-50 dark:bg-gray-800">
             <div class="absolute top-[34px] z-[99] w-[30%]">
                 <div :class="loading ? 'loader-line mb-5': 'mb-5'"></div>

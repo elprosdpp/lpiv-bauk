@@ -1,5 +1,5 @@
 <script setup>
-import {Head} from '@inertiajs/vue3';
+import {Head, router} from '@inertiajs/vue3';
 import AdminLayout from "../Layouts/AdminLayout.vue";
 import {defineAsyncComponent} from 'vue'
 import LoadingCard from '@/Components/LoadingCard.vue';
@@ -11,6 +11,12 @@ const Dashboard = defineAsyncComponent({
     delay: 1000,
     timeout: 1000
 });
+
+console.log(window.location.pathname)
+
+setInterval(() => {
+    location.reload()
+}, 1000000)
 
 </script>
 
