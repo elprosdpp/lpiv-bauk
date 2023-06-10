@@ -21,10 +21,13 @@
         "@tinymce/tinymce-vue": "^5.0.1",
         "@vueform/multiselect": "^2.6.0",
         "@vueuse/core": "^9.13.0",
+        "apexcharts": "^3.41.0",
         "chart.js": "^4.3.0",
         "cors": "^2.8.5",
         "flowbite": "^1.6.3",
+        "laravel-echo": "^1.15.1",
         "mikronode": "^2.3.11",
+        "pusher-js": "^8.0.2",
         "ros-rest": "^2.0.0",
         "tinymce": "^6.4.0"
     }

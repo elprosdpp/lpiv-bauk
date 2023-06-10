@@ -72,17 +72,17 @@ function sendAlert() {
 
 const queryURL = ref('/admin/dashboard');
 
-if (window.location.pathname == queryURL.value) {
-    setInterval(function () {
-        getEtherOne()
-    }, 1000);
-
-    setInterval(function () {
-        sendAlert()
-    }, 10000);
-    
-    setInterval(getInterface, 1000)
-}
+// if (window.location.pathname == queryURL.value) {
+//     setInterval(function () {
+//         getEtherOne()
+//     }, 1000);
+//
+//     setInterval(function () {
+//         sendAlert()
+//     }, 10000);
+//
+//     setInterval(getInterface, 1000)
+// }
 
 onMounted(() => {
     format()
@@ -91,7 +91,7 @@ onMounted(() => {
 
 <template>
 
-    <p class="text-white" v-if="ether">Ether 2 : {{ ether }} |
+    <p class="text-white" v-if="ether">Ether 2 : {{ ether1 }} |
         {{ format(ether) }}</p>
     <div class="mb-5 sm:rounded-lg border-2 p-2 border-gray-100 dark:border-gray-700">
         <div

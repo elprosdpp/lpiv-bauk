@@ -1,5 +1,6 @@
 <?php
 
+use App\Events\MonitoringEvent;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -55,6 +56,7 @@ Route::group([
     Route::resource('users', 'UserController');
     Route::resource('role', 'RoleController');
     Route::resource('category', 'CategoryController');
+    Route::resource('interface', 'InterfaceController');
 //    Route::resource('dashboard', 'DashboardController');
     Route::post('/role/{role}/permissions', [\App\Http\Controllers\Admin\RoleController::class, 'givePermission'])->name('role.permissions');
     Route::post('/users/{users}', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
@@ -62,6 +64,8 @@ Route::group([
     Route::get('/dashboard/resource', [\App\Http\Controllers\Admin\DashboardController::class, 'resource'])->name('dashboard.resource');
     Route::get('/dashboard/interface', [\App\Http\Controllers\Admin\DashboardController::class, 'interface'])->name('dashboard.interface');
     Route::get('/dashboard/ether1', [\App\Http\Controllers\Admin\DashboardController::class, 'ether1'])->name('dashboard.ether1');
+    Route::get('/interface/stream/{ether}', [\App\Http\Controllers\Admin\InterfaceController::class, 'stream'])->name('interface.stream');
+    Route::get('/interface/detail/{ether}', [\App\Http\Controllers\Admin\InterfaceController::class, 'detail'])->name('interface.detail');
     Route::resource('permission', 'PermissionController');
     Route::resource('post', 'PostController');
     Route::resource('setting', 'SettingController');
@@ -73,6 +77,11 @@ Route::group([
 Route::middleware('auth')->group(function () {
     Route::get('/updateProfil', [\App\Http\Controllers\ProfileImageController::class, 'index'])->name('updateProfil.index');
     Route::put('/updateProfil/{user}', [\App\Http\Controllers\ProfileImageController::class, 'update'])->name('updateProfil.updateImage');
+});
+
+//Route Broadcast
+Route::get('/broadcast', function () {
+    broadcast(new MonitoringEvent());
 });
 
 require __DIR__ . '/auth.php';

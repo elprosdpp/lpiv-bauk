@@ -20,6 +20,7 @@ use RouterOS\Exceptions\ConfigException;
 use RouterOS\Exceptions\ConnectException;
 use RouterOS\Exceptions\QueryException;
 use RouterOS\Query;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class SettingController extends Controller
 {

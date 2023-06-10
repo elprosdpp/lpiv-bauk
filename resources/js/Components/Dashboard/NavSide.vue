@@ -257,6 +257,50 @@ function openModal() {
                                     </DisclosurePanel>
                                 </Disclosure>
                             </li>
+                            <li v-if="role === 'super-admin'">
+                                <Disclosure>
+                                    <DisclosureButton
+                                        class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                             stroke-width="1.5" stroke="currentColor"
+                                             class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                  d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25"/>
+                                        </svg>
+
+                                        <span class="flex-1 ml-3 text-left whitespace-nowrap" sidebar-toggle-item="">Monitoring</span>
+                                        <svg class="w-6 h-6" fill="currentColor" sidebar-toggle-item=""
+                                             viewBox="0 0 20 20"
+                                             xmlns="http://www.w3.org/2000/svg">
+                                            <path clip-rule="evenodd"
+                                                  d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                                  fill-rule="evenodd"></path>
+                                        </svg>
+                                    </DisclosureButton>
+                                    <DisclosurePanel class="space-y-2 py-2">
+                                        <ul>
+                                            <li>
+                                                <ResponsiveNavLink :active="route().current('interface.index')"
+                                                                   :href="route('interface.index')">
+                                                    Interface
+                                                </ResponsiveNavLink>
+                                            </li>
+                                            <li>
+                                                <ResponsiveNavLink :active="route().current('permission.index')"
+                                                                   :href="route('permission.index')">
+                                                    Hotspot
+                                                </ResponsiveNavLink>
+                                            </li>
+                                            <li>
+                                                <ResponsiveNavLink :active="route().current('users.index')"
+                                                                   :href="route('users.index')">
+                                                    IP Address
+                                                </ResponsiveNavLink>
+                                            </li>
+                                        </ul>
+                                    </DisclosurePanel>
+                                </Disclosure>
+                            </li>
                             <li>
                                 <ResponsiveSideLink :active="route().current('category.index')"
                                                     :href="route('category.index')">
