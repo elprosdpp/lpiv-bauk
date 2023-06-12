@@ -4,6 +4,10 @@ import {Head, Link, router} from '@inertiajs/vue3';
 import {onBeforeUnmount, onMounted, ref, watch, watchEffect} from "vue";
 import {getInterfaces} from "@/Service/Service";
 import ApexCharts from 'apexcharts';
+import {useDark, useToggle} from "@vueuse/core/index";
+
+const isDark = useDark();
+const toggleDark = useToggle(isDark);
 
 const monitor = ref([]);
 const monitorTX = [];
@@ -57,16 +61,17 @@ const getInterface = () => {
 
 const options = {
     chart: {
-        height: 350,
+        height: 500,
         type: 'area',
         background: 'rgba(2,2,2,0.5)',
     },
     dataLabels: {
         enabled: false
     },
-    // theme: {
-    //     mode: isDarkMode ? "dark" : "light",
-    // },
+    theme: {
+        mode: toggleDark ? "dark" : "light",
+        palette: 'palette1',
+    },
     title: {
         text: 'Ethernet',
         align: "left"
@@ -84,11 +89,8 @@ const options = {
         }
     ],
     xaxis: {
-        category: [labels]
-    },
-    tooltip: {
-        x: {
-            format: 'dd MMM yyyy'
+        labels: {
+            show: false
         }
     },
 }
@@ -175,3 +177,9 @@ watchEffect(() => {
         </div>
     </AdminLayout>
 </template>
+
+<style lang="css">
+.apexcharts-canvas > svg {
+    background-color: transparent !important;
+}
+</style>

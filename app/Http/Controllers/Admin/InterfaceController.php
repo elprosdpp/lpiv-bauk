@@ -36,6 +36,53 @@ class InterfaceController extends Controller
         ]);
     }
 
+    /**
+     * @return mixed
+     * @throws BadCredentialsException
+     * @throws ClientException
+     * @throws ConfigException
+     * @throws ConnectException
+     * @throws QueryException
+     */
+    public function getAllInterface(): mixed
+    {
+        $user = Auth::user();
+
+        $getAllIP = Setting::all();
+        $getIP = $getAllIP->find($user);
+
+//        dd($user);
+
+        $client = $this->mikrotik($getIP);
+        $query = (new Query('/interface/print'));
+        // Ask for monitoring details
+        return $client->query($query)->read();
+    }
+
+    /**
+     * @param $ether
+     * @return mixed
+     * @throws BadCredentialsException
+     * @throws ClientException
+     * @throws ConfigException
+     * @throws ConnectException
+     * @throws QueryException
+     */
+    function getMonitorTrafficInterface($ether): mixed
+    {
+        $user = Auth::user();
+
+        $getAllIP = Setting::all();
+        $getIP = $getAllIP->find($user);
+
+        $client = $this->mikrotik($getIP);
+        $query = (new Query('/interface/monitor-traffic'))
+            ->equal('interface', $ether)
+            ->equal('once');
+        // Ask for monitoring details
+        return $client->query($query)->read();
+    }
+
 
     /**
      * @throws ClientException
@@ -46,15 +93,7 @@ class InterfaceController extends Controller
      */
     public function index(): \Inertia\Response
     {
-        $user = Auth::user();
-
-        $getAllIP = Setting::all();
-        $getIP = $getAllIP->find($user);
-
-        $client = $this->mikrotik($getIP);
-        $query = (new Query('/interface/print'));
-        // Ask for monitoring details
-        $out = $client->query($query)->read();
+        $out = $this->getAllInterface();
 
         return Inertia::render('Admin/Monitoring/Interface/Index', [
             'int' => $out,
@@ -77,17 +116,7 @@ class InterfaceController extends Controller
         $response = new StreamedResponse(function () use ($ether) {
             while (true) {
                 // Lakukan logika untuk mendapatkan data SSE dari sumber data Anda
-                $user = Auth::user();
-
-                $getAllIP = Setting::all();
-                $getIP = $getAllIP->find($user);
-
-                $client = $this->mikrotik($getIP);
-                $query = (new Query('/interface/monitor-traffic'))
-                    ->equal('interface', $ether)
-                    ->equal('once');
-                // Ask for monitoring details
-                $out = $client->query($query)->read();
+                $out = $this->getMonitorTrafficInterface($ether);
 
 
                 $data = [
