@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
@@ -37,6 +39,18 @@ class InterfaceController extends Controller
     }
 
     /**
+     * @return Collection|Model|mixed|null
+     */
+    private function getIP(): mixed
+    {
+        $user = Auth::user();
+
+        $getAllIP = Setting::all();
+        return $getAllIP->find($user);
+    }
+
+
+    /**
      * @return mixed
      * @throws BadCredentialsException
      * @throws ClientException
@@ -46,11 +60,7 @@ class InterfaceController extends Controller
      */
     public function getAllInterface(): mixed
     {
-        $user = Auth::user();
-
-        $getAllIP = Setting::all();
-        $getIP = $getAllIP->find($user);
-
+        $getIP = $this->getIP();
 //        dd($user);
 
         $client = $this->mikrotik($getIP);
@@ -70,10 +80,7 @@ class InterfaceController extends Controller
      */
     function getMonitorTrafficInterface($ether): mixed
     {
-        $user = Auth::user();
-
-        $getAllIP = Setting::all();
-        $getIP = $getAllIP->find($user);
+        $getIP = $this->getIP();
 
         $client = $this->mikrotik($getIP);
         $query = (new Query('/interface/monitor-traffic'))
@@ -95,6 +102,8 @@ class InterfaceController extends Controller
     {
         $out = $this->getAllInterface();
 
+//        dd($out);
+
         return Inertia::render('Admin/Monitoring/Interface/Index', [
             'int' => $out,
             'can' => [
@@ -105,36 +114,37 @@ class InterfaceController extends Controller
         ]);
     }
 
+
+    //   View Detail Interface Monitor
     public function detail($ether): \Inertia\Response
     {
         return Inertia::render('Admin/Monitoring/Interface');
     }
 
 
+    //    Stream Data Get All Interface
     public function stream(\Illuminate\Support\Facades\Request $request, $ether): StreamedResponse
     {
         $response = new StreamedResponse(function () use ($ether) {
             while (true) {
-                // Lakukan logika untuk mendapatkan data SSE dari sumber data Anda
+                // Logic Get Monitor Interface By Name URL
                 $out = $this->getMonitorTrafficInterface($ether);
-
 
                 $data = [
                     'message' => 'Data Ether Update',
-                    'timestamp' => now(),
+                    'timestamp' => now()->toDateTimeString(),
 //                    'data' => $out,
                     'name' => $out[0]["name"],
                     'tx_byte' => $out[0]["tx-bits-per-second"],
                     'rx_byte' => $out[0]["rx-bits-per-second"]
                 ];
 
-
-                // Kirimkan data SSE ke client
+                // Send Data To SSE Client
                 echo "data: " . json_encode($data) . "\n\n";
                 ob_flush();
                 flush();
 
-                // Tambahkan delay jika perlu sebelum mengirimkan data berikutnya
+                // Add Delay From Backend To Client Repeat New Data Monitor
                 sleep(1);
             }
         });
