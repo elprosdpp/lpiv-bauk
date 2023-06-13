@@ -16,7 +16,7 @@ Interface Page :
 <br>
 <br>
 Detail Interface Page :
-<a href="#"><img src="C:\laragon\www\lpiv-bauk\capture\Interface_Detail_Page.jpg" alt="Interface Page"></a>
+<a href="#"><img src="/capture/Interface_Detail_Page.jpg" alt="Interface Page"></a>
 </p>
 
 ## About Laravel
