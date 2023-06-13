@@ -12,7 +12,7 @@
 Update on June 13, 2023
 <p align="center">
 Interface Page :
-<a href="#"><img src="C:\laragon\www\lpiv-bauk\capture\Interface_Page.jpg" alt="Interface Page"></a>
+<a href="#"><img src="/capture/Interface_Page.jpg" alt="Interface Page"></a>
 <br>
 <br>
 Detail Interface Page :
