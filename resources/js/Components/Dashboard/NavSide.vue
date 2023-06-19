@@ -286,8 +286,8 @@ function openModal() {
                                                 </ResponsiveNavLink>
                                             </li>
                                             <li>
-                                                <ResponsiveNavLink :active="route().current('permission.index')"
-                                                                   :href="route('permission.index')">
+                                                <ResponsiveNavLink :active="route().current('hotspot.index')"
+                                                                   :href="route('hotspot.index')">
                                                     Hotspot
                                                 </ResponsiveNavLink>
                                             </li>

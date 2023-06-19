@@ -17,38 +17,11 @@ use RouterOS\Exceptions\ConnectException;
 use RouterOS\Exceptions\QueryException;
 use RouterOS\Query;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use App\Traits\getMikrotikIP;
 
 class InterfaceController extends Controller
 {
-
-    /**
-     * @throws ClientException
-     * @throws ConnectException
-     * @throws QueryException
-     * @throws BadCredentialsException
-     * @throws ConfigException
-     */
-    private function mikrotik($getIP): Client
-    {
-        return new Client([
-            'host' => $getIP->ip_address_router,
-            'user' => $getIP->username_router,
-            'pass' => $getIP->password_router,
-            'port' => 8728,
-        ]);
-    }
-
-    /**
-     * @return Collection|Model|mixed|null
-     */
-    private function getIP(): mixed
-    {
-        $user = Auth::user();
-
-        $getAllIP = Setting::all();
-        return $getAllIP->find($user);
-    }
-
+    use getMikrotikIP;
 
     /**
      * @return mixed
@@ -60,13 +33,11 @@ class InterfaceController extends Controller
      */
     public function getAllInterface(): mixed
     {
-        $getIP = $this->getIP();
-//        dd($user);
+        $getIP = $this->connectIP();
 
-        $client = $this->mikrotik($getIP);
         $query = (new Query('/interface/print'));
         // Ask for monitoring details
-        return $client->query($query)->read();
+        return $getIP->query($query)->read();
     }
 
     /**
@@ -80,14 +51,13 @@ class InterfaceController extends Controller
      */
     function getMonitorTrafficInterface($ether): mixed
     {
-        $getIP = $this->getIP();
+        $getIP = $this->connectIP();
 
-        $client = $this->mikrotik($getIP);
         $query = (new Query('/interface/monitor-traffic'))
             ->equal('interface', $ether)
             ->equal('once');
         // Ask for monitoring details
-        return $client->query($query)->read();
+        return $getIP->query($query)->read();
     }
 
 
@@ -118,7 +88,7 @@ class InterfaceController extends Controller
     //   View Detail Interface Monitor
     public function detail($ether): \Inertia\Response
     {
-        return Inertia::render('Admin/Monitoring/Interface');
+        return Inertia::render('Admin/Monitoring/Interface/Interface');
     }
 
 

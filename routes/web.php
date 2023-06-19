@@ -53,26 +53,34 @@ Route::group([
     'prefix' => 'admin',
     'middleware' => ['auth'],
 ], function () {
+    //    Routes Global Function
     Route::resource('users', 'UserController');
     Route::resource('role', 'RoleController');
     Route::resource('category', 'CategoryController');
     Route::resource('interface', 'InterfaceController');
-//    Route::resource('dashboard', 'DashboardController');
+    Route::resource('hotspot', 'HotspotController');
+    Route::resource('permission', 'PermissionController');
+    Route::resource('post', 'PostController');
+    Route::resource('setting', 'SettingController');
+
+    //   Not Definition
     Route::post('/role/{role}/permissions', [\App\Http\Controllers\Admin\RoleController::class, 'givePermission'])->name('role.permissions');
     Route::post('/users/{users}', [\App\Http\Controllers\Admin\UserController::class, 'update'])->name('users.update');
     Route::delete('/role/{role}/permissions/{permission}', [\App\Http\Controllers\Admin\RoleController::class, 'revokePermission'])->name('roles.permissions.revoke');
     Route::get('/dashboard/resource', [\App\Http\Controllers\Admin\DashboardController::class, 'resource'])->name('dashboard.resource');
     Route::get('/dashboard/interface', [\App\Http\Controllers\Admin\DashboardController::class, 'interface'])->name('dashboard.interface');
     Route::get('/dashboard/ether1', [\App\Http\Controllers\Admin\DashboardController::class, 'ether1'])->name('dashboard.ether1');
+
+    //    Routes Interface
     Route::get('/interface/stream/{ether}', [\App\Http\Controllers\Admin\InterfaceController::class, 'stream'])->name('interface.stream');
     Route::get('/interface/detail/{ether}', [\App\Http\Controllers\Admin\InterfaceController::class, 'detail'])->name('interface.detail');
-    Route::resource('permission', 'PermissionController');
-    Route::resource('post', 'PostController');
-    Route::resource('setting', 'SettingController');
+
+    //    Routes Hotspot
+    Route::get('/hotspot/profile/{profile}', [\App\Http\Controllers\Admin\HotspotController::class, 'detailHotspot'])->name('hotspot.profile');
+    Route::get('/hotspot/user/active', [\App\Http\Controllers\Admin\HotspotController::class, 'activeHotspot'])->name('hotspot.active');
+    Route::get('/hotspot/user/StreamActiveHotspot', [\App\Http\Controllers\Admin\HotspotController::class, 'StreamActiveHotspot'])->name('hotspot.StreamActiveHotspot');
 });
 
-
-//->middleware(['auth', 'verified'])
 
 Route::middleware('auth')->group(function () {
     Route::get('/updateProfil', [\App\Http\Controllers\ProfileImageController::class, 'index'])->name('updateProfil.index');
