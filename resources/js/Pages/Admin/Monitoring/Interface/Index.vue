@@ -2,7 +2,8 @@
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import {Head, Link} from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import ApexCharts from "@/Components/ApexChart.vue";
+import ArrayPagination from "@/Components/ArrayPagination.vue";
+import {computed, ref} from "vue";
 
 const props = defineProps({
     int: {
@@ -14,6 +15,31 @@ const props = defineProps({
         default: () => ({}),
     },
 })
+
+const currentPage = ref(1);
+const pageSize = ref(10);
+const data = props.int;
+const totalPage = Math.ceil(data.length / pageSize.value);
+const searchQuery = ref('');
+
+const filteredItems = computed(() => {
+    const filtered = data.filter(item => {
+        return item.name.toLowerCase().includes(searchQuery.value.toLowerCase());
+    });
+
+    const startIndex = (currentPage.value - 1) * pageSize.value;
+    const endIndex = startIndex + pageSize.value;
+
+    return filtered.slice(startIndex, endIndex);
+});
+
+const totalPages = computed(() => {
+    return Math.ceil(filteredItems.value.length / pageSize.value);
+});
+
+const onPageChange = (page) => {
+    currentPage.value = page;
+}
 </script>
 
 <template>
@@ -44,10 +70,10 @@ const props = defineProps({
                                           stroke-width="2"></path>
                                 </svg>
                             </div>
-                            <!--                            <input v-model="search"-->
-                            <!--                                   class="block w-full p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"-->
-                            <!--                                   placeholder="Search Users..."-->
-                            <!--                                   required type="search">-->
+                            <input v-model="searchQuery"
+                                   class="block w-full p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                   placeholder="Search Interfaces"
+                                   required type="search">
                         </div>
                     </div>
                 </div>
@@ -63,7 +89,7 @@ const props = defineProps({
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="int in int" :key="int.name"
+                        <tr v-for="int in filteredItems" :key="int.name"
                             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700"
                             :class="int.running !== 'true' ? 'text-gray-500' : ''">
                             <td class="py-4 px-6" data-label="Title">
@@ -121,6 +147,14 @@ const props = defineProps({
                         </tr>
                         </tbody>
                     </table>
+                </div>
+
+                <div class="my-10" v-if="totalPages">
+                    <ArrayPagination
+                        :totalPages="searchQuery === '' ? totalPage : totalPages"
+                        :perPage="pageSize"
+                        :currentPage="currentPage"
+                        @pagechanged="onPageChange"/>
                 </div>
             </div>
         </div>

@@ -292,8 +292,8 @@ function openModal() {
                                                 </ResponsiveNavLink>
                                             </li>
                                             <li>
-                                                <ResponsiveNavLink :active="route().current('users.index')"
-                                                                   :href="route('users.index')">
+                                                <ResponsiveNavLink :active="route().current('address.index')"
+                                                                   :href="route('address.index')">
                                                     IP Address
                                                 </ResponsiveNavLink>
                                             </li>

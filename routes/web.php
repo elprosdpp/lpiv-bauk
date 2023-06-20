@@ -62,6 +62,7 @@ Route::group([
     Route::resource('permission', 'PermissionController');
     Route::resource('post', 'PostController');
     Route::resource('setting', 'SettingController');
+    Route::resource('address', 'AddressController');
 
     //   Not Definition
     Route::post('/role/{role}/permissions', [\App\Http\Controllers\Admin\RoleController::class, 'givePermission'])->name('role.permissions');
@@ -79,6 +80,8 @@ Route::group([
     Route::get('/hotspot/profile/{profile}', [\App\Http\Controllers\Admin\HotspotController::class, 'detailHotspot'])->name('hotspot.profile');
     Route::get('/hotspot/user/active', [\App\Http\Controllers\Admin\HotspotController::class, 'activeHotspot'])->name('hotspot.active');
     Route::get('/hotspot/user/StreamActiveHotspot', [\App\Http\Controllers\Admin\HotspotController::class, 'StreamActiveHotspot'])->name('hotspot.StreamActiveHotspot');
+    Route::get('/hotspot/user/create', [\App\Http\Controllers\Admin\HotspotController::class, 'createUserHotspot'])->name('hotspot.add');
+    Route::post('/hotspot/user/store/{name}/{password}/{profile}/{server}', [\App\Http\Controllers\Admin\HotspotController::class, 'addUserHotpot'])->name('hotspot.store');
 });
 
 

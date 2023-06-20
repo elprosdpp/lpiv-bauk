@@ -210,9 +210,9 @@ const isPageActive = (page) => {
     return props.currentPage === page;
 };
 
-watchEffect(() => {
-    console.log(props.currentPage)
-});
+// watchEffect(() => {
+//     console.log(props.currentPage)
+// });
 </script>
 
 <style scoped>

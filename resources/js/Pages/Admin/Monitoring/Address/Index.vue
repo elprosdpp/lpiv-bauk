@@ -2,10 +2,11 @@
 import AdminLayout from "@/Layouts/AdminLayout.vue";
 import {Head, Link} from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import {ref} from "vue";
+import ArrayPagination from "@/Components/ArrayPagination.vue";
+import {computed, ref} from "vue";
 
 const props = defineProps({
-    profileHotspot: {
+    IpAddress: {
         type: Array,
         default: () => ([]),
     },
@@ -15,12 +16,36 @@ const props = defineProps({
     },
 })
 
-const search = ref('');
+
+const currentPage = ref(1);
+const pageSize = ref(10);
+const data = props.IpAddress;
+const totalPage = Math.ceil(data.length / pageSize.value);
+const searchQuery = ref('');
+
+const filteredItems = computed(() => {
+    const filtered = data.filter(item => {
+        return item.address.toLowerCase().includes(searchQuery.value.toLowerCase());
+    });
+
+    const startIndex = (currentPage.value - 1) * pageSize.value;
+    const endIndex = startIndex + pageSize.value;
+
+    return filtered.slice(startIndex, endIndex);
+});
+
+const totalPages = computed(() => {
+    return Math.ceil(filteredItems.value.length / pageSize.value);
+});
+
+const onPageChange = (page) => {
+    currentPage.value = page;
+}
 </script>
 
 <template>
 
-    <Head title="Hotspot List"/>
+    <Head title="Address List"/>
 
 
     <AdminLayout>
@@ -28,34 +53,22 @@ const search = ref('');
         <div class="py-12">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 mb-5">
                 <div class="overflow-hidden sm:rounded-lg">
-                    <div class="grid grid-cols-3 gap-4 flex items-center">
-                        <div class="col-span-2 flex">
-                            <div v-if="can.create" class="flex space-x-2 items-center">
-                                <Link :href="route('hotspot.add')"
-                                      class="inline-flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                         stroke-width="1.5"
-                                         stroke="currentColor" class="w-5 h-5 mr-2">
-                                        <path stroke-linecap="round" stroke-linejoin="round"
-                                              d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25"/>
-                                    </svg>
-                                    Add User
-                                </Link>
-                            </div>
-                            <Link :href="route('hotspot.active')"
-                                  class="inline-flex items-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800"
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                     stroke-width="1.5"
-                                     stroke="currentColor" class="w-5 h-5 mr-2">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                          d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25"/>
-                                </svg>
-                                User Active
-                            </Link>
+                    <div class="flex justify-between items-center">
+                        <div v-if="can.create" class="flex space-x-2 items-center">
+                            <!--                            <Link :href="route('hotspot.active')"-->
+                            <!--                                  class="inline-flex items-center text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"-->
+                            <!--                            >-->
+                            <!--                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"-->
+                            <!--                                     stroke-width="1.5"-->
+                            <!--                                     stroke="currentColor" class="w-5 h-5 mr-2">-->
+                            <!--                                    <path stroke-linecap="round" stroke-linejoin="round"-->
+                            <!--                                          d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25"/>-->
+                            <!--                                </svg>-->
+                            <!--                                User Active-->
+                            <!--                            </Link>-->
                         </div>
-                        <div class="relative col-end-7 col-span-2">
+
+                        <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                 <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none"
                                      stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -64,9 +77,9 @@ const search = ref('');
                                           stroke-width="2"></path>
                                 </svg>
                             </div>
-                            <input v-model="search"
+                            <input v-model="searchQuery"
                                    class="block w-full p-3 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                   placeholder="Search Users..."
+                                   placeholder="Search IP Address"
                                    required type="search">
                         </div>
                     </div>
@@ -81,19 +94,23 @@ const search = ref('');
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                         <tr>
-                            <th class="py-3 px-6" scope="col">Name</th>
-                            <th class="py-3 px-6" scope="col">Shared Users</th>
+                            <th class="py-3 px-6" scope="col">Address</th>
+                            <th class="py-3 px-6" scope="col">Network</th>
+                            <th class="py-3 px-6" scope="col">Interface</th>
                             <th v-if="can.edit || can.delete" class="py-3 px-6" scope="col">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr v-for="phost in profileHotspot" :key="phost['.id']"
+                        <tr v-for="add in filteredItems" :key="add['.id']"
                             class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
                             <td class="py-4 px-6" data-label="Title">
-                                {{ phost['name'] }}
+                                {{ add['address'] }}
                             </td>
                             <td class="py-4 px-6" data-label="Title">
-                                {{ phost['shared-users'] }}
+                                {{ add['network'] }}
+                            </td>
+                            <td class="py-4 px-6" data-label="Title">
+                                {{ add['interface'] }}
                             </td>
 
                             <td
@@ -101,18 +118,18 @@ const search = ref('');
                                 class="py-4 px-6 w-48"
                             >
                                 <div class="flex space-x-2">
-                                    <Link v-if="can.edit"
-                                          :href="'/admin/hotspot/profile/'+ phost['name']"
-                                          class="px-2 py-1 rounded text-white bg-blue-500 cursor-pointer flex items-center">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                             stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                  d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                                        </svg>
-                                        Detail
-                                    </Link>
+                                    <!--                                    <Link v-if="can.edit"-->
+                                    <!--                                          :href="'/admin/hotspot/profile/'+ phost['name']"-->
+                                    <!--                                          class="px-2 py-1 rounded text-white bg-blue-500 cursor-pointer flex items-center">-->
+                                    <!--                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"-->
+                                    <!--                                             stroke-width="1.5" stroke="currentColor" class="w-4 h-4 mr-1">-->
+                                    <!--                                            <path stroke-linecap="round" stroke-linejoin="round"-->
+                                    <!--                                                  d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>-->
+                                    <!--                                            <path stroke-linecap="round" stroke-linejoin="round"-->
+                                    <!--                                                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>-->
+                                    <!--                                        </svg>-->
+                                    <!--                                        Detail-->
+                                    <!--                                    </Link>-->
                                     <!--                                    <Link v-if="can.delete"-->
                                     <!--                                          :href="route('post.destroy', post.id)"-->
                                     <!--                                          as="button"-->
@@ -135,6 +152,13 @@ const search = ref('');
                     </table>
                 </div>
 
+                <div class="my-10" v-if="totalPages">
+                    <ArrayPagination
+                        :totalPages="searchQuery === '' ? totalPage : totalPages"
+                        :perPage="pageSize"
+                        :currentPage="currentPage"
+                        @pagechanged="onPageChange"/>
+                </div>
             </div>
         </div>
     </AdminLayout>

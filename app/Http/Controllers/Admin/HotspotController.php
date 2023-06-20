@@ -89,6 +89,29 @@ class HotspotController extends Controller
      * @throws BadCredentialsException
      * @throws ConfigException
      */
+    public function addUserHotpot($name, $password, $profile, $server): \Illuminate\Http\RedirectResponse
+    {
+        $getIP = $this->connectIP();
+
+        $query = (new Query('/ip/hotspot/user/add'))
+            ->equal('name', $name)
+            ->equal('password', $password)
+            ->equal('profile', $profile)
+            ->equal('server', $server);
+        
+        // Ask for monitoring details
+        $getIP->query($query)->read();
+
+        return back()->with("message", "User Hotspot Berhasil Ditambah ");
+    }
+
+    /**
+     * @throws ClientException
+     * @throws ConnectException
+     * @throws QueryException
+     * @throws BadCredentialsException
+     * @throws ConfigException
+     */
     public function index(): \Inertia\Response
     {
         $out = $this->getAllProfileHotspot();
@@ -120,8 +143,25 @@ class HotspotController extends Controller
 
         return Inertia::render('Admin/Monitoring/Hotspot/Detail', [
             'detailHotspot' => $detail,
+            'can' => [
+                'create' => Auth::user()->can('hotspot create'),
+                'edit' => Auth::user()->can('hotspot edit'),
+                'delete' => Auth::user()->can('hotspot delete'),
+            ]
         ]);
 
+    }
+
+    /**
+     * @throws ClientException
+     * @throws ConnectException
+     * @throws QueryException
+     * @throws BadCredentialsException
+     * @throws ConfigException
+     */
+    public function createUserHotspot(): \Inertia\Response
+    {
+        return Inertia::render('Admin/Monitoring/Hotspot/Create');
     }
 
 
@@ -160,5 +200,6 @@ class HotspotController extends Controller
     {
         return Inertia::render('Admin/Monitoring/Hotspot/Active');
     }
+
 
 }
