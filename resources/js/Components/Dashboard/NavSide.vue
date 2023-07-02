@@ -261,12 +261,14 @@ function openModal() {
                                 <Disclosure>
                                     <DisclosureButton
                                         class="flex items-center w-full p-2 text-base text-gray-900 transition duration-75 rounded-lg group hover:bg-gray-100 dark:text-gray-200 dark:hover:bg-gray-700">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                             stroke-width="1.5" stroke="currentColor"
+
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
                                              class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                  d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0V12a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 12V5.25"/>
+                                            <path fill-rule="evenodd"
+                                                  d="M2.25 5.25a3 3 0 013-3h13.5a3 3 0 013 3V15a3 3 0 01-3 3h-3v.257c0 .597.237 1.17.659 1.591l.621.622a.75.75 0 01-.53 1.28h-9a.75.75 0 01-.53-1.28l.621-.622a2.25 2.25 0 00.659-1.59V18h-3a3 3 0 01-3-3V5.25zm1.5 0v7.5a1.5 1.5 0 001.5 1.5h13.5a1.5 1.5 0 001.5-1.5v-7.5a1.5 1.5 0 00-1.5-1.5H5.25a1.5 1.5 0 00-1.5 1.5z"
+                                                  clip-rule="evenodd"/>
                                         </svg>
+
 
                                         <span class="flex-1 ml-3 text-left whitespace-nowrap" sidebar-toggle-item="">Monitoring</span>
                                         <svg class="w-6 h-6" fill="currentColor" sidebar-toggle-item=""
@@ -300,6 +302,19 @@ function openModal() {
                                         </ul>
                                     </DisclosurePanel>
                                 </Disclosure>
+                            </li>
+                            <li>
+                                <ResponsiveSideLink :active="route().current('terminal.index')"
+                                                    :href="route('terminal.index')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"
+                                         :class="route().current('terminal.index') ? 'w-6 h-6 text-gray-900 transition duration-75 group-hover:text-gray-900 dark:text-gray-100 dark:group-hover:text-white' : 'w-6 h-6 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white'">
+                                        <path fill-rule="evenodd"
+                                              d="M2.25 6a3 3 0 013-3h13.5a3 3 0 013 3v12a3 3 0 01-3 3H5.25a3 3 0 01-3-3V6zm3.97.97a.75.75 0 011.06 0l2.25 2.25a.75.75 0 010 1.06l-2.25 2.25a.75.75 0 01-1.06-1.06l1.72-1.72-1.72-1.72a.75.75 0 010-1.06zm4.28 4.28a.75.75 0 000 1.5h3a.75.75 0 000-1.5h-3z"
+                                              clip-rule="evenodd"/>
+                                    </svg>
+
+                                    <span class="ml-3" sidebar-toggle-item="">Terminal</span>
+                                </ResponsiveSideLink>
                             </li>
                             <li>
                                 <ResponsiveSideLink :active="route().current('category.index')"

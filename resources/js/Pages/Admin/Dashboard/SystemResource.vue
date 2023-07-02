@@ -1,6 +1,6 @@
 <script setup>
 import {getResources} from "@/Service/Service.js";
-import {onBeforeMount, onMounted, ref, watchEffect} from 'vue'
+import {onBeforeMount, onBeforeUnmount, onMounted, ref, watchEffect} from 'vue'
 
 const data = ref('');
 const loading = ref(false);
@@ -16,11 +16,14 @@ const getResource = () => {
 }
 
 
-onBeforeMount(() => {
-    setTimeout(getResources, 1000)
+onMounted(() => {
+    setInterval(getResource, 5000)
+});
+
+onBeforeUnmount(() => {
+    clearInterval(getResources)
 })
 
-watchEffect(() => setInterval(getResource, 5000));
 </script>
 
 <template>

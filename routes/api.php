@@ -17,6 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::post('/terminal/post', [\App\Http\Controllers\Admin\TerminalController::class, 'executeCommand'])->name('terminal.executeCommand');
+//Route::post('/hotspot/user/store', [\App\Http\Controllers\Admin\HotspotController::class, 'addUserHotpot'])->name('hotspot.store');
 
 //Route::group(['middleware' => 'auth'], function () {
 //Route::get('/monitor', \App\Http\Controllers\MonitorController::class);

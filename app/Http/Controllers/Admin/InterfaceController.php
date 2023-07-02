@@ -93,7 +93,7 @@ class InterfaceController extends Controller
 
 
     //    Stream Data Get All Interface
-    public function stream(\Illuminate\Support\Facades\Request $request, $ether): StreamedResponse
+    public function stream($ether): StreamedResponse
     {
         $response = new StreamedResponse(function () use ($ether) {
             while (true) {

@@ -4,6 +4,7 @@ import {Head, Link, router, useForm} from '@inertiajs/vue3';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import ArrayPagination from "@/Components/ArrayPagination.vue";
 import {computed, onMounted, ref, watchEffect} from "vue";
+import {usePagination} from '@/Service/paginationUtils.js';
 import {
     TransitionRoot,
     TransitionChild,
@@ -23,18 +24,9 @@ const props = defineProps({
     },
 })
 
-const currentPage = ref(1);
 const pageSize = ref(10);
 const data = props.detailHotspot;
 const totalPage = Math.ceil(data.length / pageSize.value);
-const searchQuery = ref('');
-
-//Store User Hotspot
-const name = ref('');
-const password = ref('');
-const profile = ref('');
-const server = ref('');
-//End Store User Hotspot
 
 // function Paginator(items, page, per_page) {
 //
@@ -65,15 +57,24 @@ function openModal() {
     isOpen.value = true;
 }
 
+function getURL() {
+    const URL = window.location.pathname;
+    const split = URL.split('/')
+    // console.log(split.pop())
+    return split.pop()
+}
+
+// console.log(getURL())
+
 const form = useForm({
     name: '',
     password: '',
-    profile: '',
+    profile: getURL(),
     server: ''
 });
 
 const storeUserHotspot = () => {
-    form.post('/admin/hotspot/user/store/' + form.name + '/' + form.password + '/' + form.profile + '/' + form.server, {
+    form.post(route('hotspot.store'), {
         preserveScroll: true,
         onSuccess: () => {
             closeModal();
@@ -85,32 +86,31 @@ const storeUserHotspot = () => {
     });
 };
 
+const {
+    searchQuery,
+    currentPage,
+    itemsPerPage,
+    filteredItems,
+    totalPages
+} = usePagination(data);
 
-const filteredItems = computed(() => {
-    const filtered = data.filter(item => {
-        return item.name.toLowerCase().includes(searchQuery.value.toLowerCase());
-    });
-
-    const startIndex = (currentPage.value - 1) * pageSize.value;
-    const endIndex = startIndex + pageSize.value;
-
-    return filtered.slice(startIndex, endIndex);
-});
-
-const totalPages = computed(() => {
-    return Math.ceil(filteredItems.value.length / pageSize.value);
-});
 
 const onPageChange = (page) => {
     currentPage.value = page;
 }
 
-// onMounted(() => {
-//     // getMatchingResults()
-// })
+const search = () => {
+    if (searchQuery.value !== '') {
+        return onPageChange(1) // Reset halaman saat pencarian dilakukan
+    }
+}
+
+onMounted(() => {
+    getURL()
+})
 
 watchEffect(() => {
-
+    search()
 });
 </script>
 
@@ -244,7 +244,7 @@ watchEffect(() => {
                 <div class="my-10" v-if="totalPages">
                     <ArrayPagination
                         :totalPages="searchQuery === '' ? totalPage : totalPages"
-                        :perPage="pageSize"
+                        :perPage="itemsPerPage"
                         :currentPage="currentPage"
                         @pagechanged="onPageChange"/>
                 </div>

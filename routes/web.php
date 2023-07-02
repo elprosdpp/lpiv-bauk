@@ -6,6 +6,11 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
+//use Ratchet\Http\HttpServer;
+//use Ratchet\Server\IoServer;
+//use Ratchet\WebSocket\WsServer;
+//use App\WebSockets\TerminalWebSocket;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -63,6 +68,9 @@ Route::group([
     Route::resource('post', 'PostController');
     Route::resource('setting', 'SettingController');
     Route::resource('address', 'AddressController');
+    Route::resource('terminal', 'TerminalController');
+
+    Route::post('/terminal/process/executeProcess', [\App\Http\Controllers\Admin\TerminalController::class, 'executeProcess']);
 
     //   Not Definition
     Route::post('/role/{role}/permissions', [\App\Http\Controllers\Admin\RoleController::class, 'givePermission'])->name('role.permissions');
@@ -81,7 +89,8 @@ Route::group([
     Route::get('/hotspot/user/active', [\App\Http\Controllers\Admin\HotspotController::class, 'activeHotspot'])->name('hotspot.active');
     Route::get('/hotspot/user/StreamActiveHotspot', [\App\Http\Controllers\Admin\HotspotController::class, 'StreamActiveHotspot'])->name('hotspot.StreamActiveHotspot');
     Route::get('/hotspot/user/create', [\App\Http\Controllers\Admin\HotspotController::class, 'createUserHotspot'])->name('hotspot.add');
-    Route::post('/hotspot/user/store/{name}/{password}/{profile}/{server}', [\App\Http\Controllers\Admin\HotspotController::class, 'addUserHotpot'])->name('hotspot.store');
+    Route::delete('/hotspot/user/remove/{id}', [\App\Http\Controllers\Admin\HotspotController::class, 'removeUserHotspot'])->name('hotspot.destroy');
+    Route::post('/hotspot/user/store', [\App\Http\Controllers\Admin\HotspotController::class, 'addUserHotpot'])->name('hotspot.store');
 });
 
 

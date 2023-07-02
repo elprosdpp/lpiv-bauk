@@ -34,7 +34,7 @@ function format(speed) {
 const stream = () => {
     loading.value = true;
 
-    eventSource.value = new EventSource('/admin/interface/stream/' + filter.value);
+    eventSource.value = new EventSource('/admin/interface/stream/' + getURL());
     eventSource.value.onmessage = (event) => {
         // Use event.data to access SSE data received from the server
         monitor.value = JSON.parse(event.data);
@@ -69,9 +69,9 @@ onBeforeUnmount(() => {
     closeEvent()
 });
 
-watchEffect(() => {
-    stream()
-});
+// watchEffect(() => {
+//     stream()
+// });
 
 </script>
 <template>
